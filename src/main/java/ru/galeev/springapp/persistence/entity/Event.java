@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -21,17 +22,58 @@ public class Event {
     @Column(name = "name")
     private String name;
 
-    private Timestamp time; // Время проведения
-    private double xCoord; // X координата геопозиции
-    private double yCoord; // Y координата геопозиции
-    private String place; // Место проведения
+    @Getter
+    @Setter
+    @Column(name = "time")
+    private Date time; // Время проведения
+
+    @Getter
+    @Setter
+    @ManyToOne
+    @JoinColumn(name = "place_id")
+    private Place place; // Место проведения
+
+    @Getter
+    @Setter
+    @Column(name = "cost")
     private int cost; // Стоимость входа
+
+    @Getter
+    @Setter
+    @Column(name = "music")
     private int music; // Жанр музыки
-    private String author; // Автор
+
+    @ManyToMany(mappedBy = "eventList")
     private List<EventManager> eventManager; // Организатор мероприятия
-    private List<Artist> artistList; // Приглашенные звезды
+
+    @ManyToMany(mappedBy = "artistRegisteredEvents")
+    private List<User> artistList; // Приглашенные звезды
+
+    @ManyToMany(mappedBy = "userRegisteredEvents")
+    private List<User> userList;
+
+    @Getter
+    @Setter
+    @Column(name = "rating")
     private double rating; // Рейтинг
+
+    @Getter
+    @Setter
+    @Column(name = "middle_price")
     private int middlePrice; // Средний чек
+
+    @Getter
+    @Setter
+    @Column(name = "registered_visitors")
     private int registeredVisitors; // Количество зарегистрированных пользователей
-    private int attendVisitors; // Количество посетивших пользователей
+
+    @Getter
+    @Setter
+    @Column(name = "attended_visitors")
+    private int attendedVisitors; // Количество посетивших пользователей
+
+    @Getter
+    @Setter
+    @Column(name = "min_age")
+    private int minAge; // Возрастное ограничение
 }

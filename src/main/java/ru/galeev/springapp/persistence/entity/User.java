@@ -29,8 +29,35 @@ public class User {
     @Column(name = "email")
     private String email;
 
-    private List<Event> registeredEvents;
-    private List<Event> attendedEvents;
+    @Getter
+    @Setter
+    @Column(name = "role")
+    private int isAuthorArtis; // 0 - никто; 1 - Артист
 
+    @Getter
+    @ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(
+            name = "relation_events_users",
+            joinColumns = { @JoinColumn(name = "event") },
+            inverseJoinColumns = { @JoinColumn(name = "user") }
+    )
+    private List<Event> userRegisteredEvents;
+
+    @Getter
+    @ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(
+            name = "relation_events_event_artists",
+            joinColumns = { @JoinColumn(name = "event") },
+            inverseJoinColumns = { @JoinColumn(name = "artist") }
+    )
+    private List<Event> artistRegisteredEvents;
+
+    @Getter
+    @ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(
+            name = "user_friendships",
+            joinColumns = { @JoinColumn(name = "user_1") },
+            inverseJoinColumns = { @JoinColumn(name = "user_2") }
+    )
     private List<User> friends;
 }

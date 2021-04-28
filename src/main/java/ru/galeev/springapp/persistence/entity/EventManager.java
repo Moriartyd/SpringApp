@@ -14,7 +14,6 @@ public class EventManager {
     @Getter
     @GeneratedValue
     private long id;
-    private List<Event> eventList;
 
     @Getter
     @Setter
@@ -23,13 +22,27 @@ public class EventManager {
 
     @Getter
     @Setter
-    @Column(name = )
+    @Column(name = "average_visitors")
     private int averageVisitorsCount; //среднее количество поситителей
+
+    @Getter
+    @Setter
+    @Column(name = "min_price")
     private int priceRangeMin;
+
+    @Getter
+    @Setter
+    @Column(name = "max_price")
     private int priceRangeMax; //диапазон цены за вход
 
+    @Getter
+    @ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(
+            name = "relation_events_event_managers",
+            joinColumns = { @JoinColumn(name = "event") },
+            inverseJoinColumns = { @JoinColumn(name = "manager") }
+    )
+    private List<Event> eventList;//DONE
 
-
-
-    private double averageEventRating; //Не хранится в бд, рассчитывается в java
+//    private double averageEventRating; //
 }
