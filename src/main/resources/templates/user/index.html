@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+    <title>index</title>
+</head>
+<body>
+<div>
+<form th:method="GET" th:action="@{/user/sign_up}">
+<button value="Регистрация"/>
+</form>
+<form th:method="GET" th:action="@{/user/log_in}">
+    <button value="Вход"/>
+</form>
+</div>
+</body>
+</html>

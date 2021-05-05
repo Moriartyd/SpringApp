@@ -1,13 +1,17 @@
 package ru.galeev.springapp.persistence.entity;
 
+import com.sun.istack.NotNull;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+
 import java.util.List;
 
 @Entity
-@Table(name = "User")
+@NoArgsConstructor
+@Table(name = "Users")
 public class User {
     @Id
     @Getter
@@ -23,6 +27,16 @@ public class User {
     @Setter
     @Column(name = "password")
     private String password;
+
+    @Getter
+    @Setter
+    @Column(name = "name")
+    private String name;
+
+    @Getter
+    @Setter
+    @Column(name = "surname")
+    private String surname;
 
     @Getter
     @Setter
@@ -60,4 +74,19 @@ public class User {
             inverseJoinColumns = { @JoinColumn(name = "user_2") }
     )
     private List<User> friends;
+
+    @Getter
+    @Setter
+    @Column(name = "age")
+    private int age;
+
+    public User(String login, String password) {
+        this.login = login;
+        this.password = password;
+        this.name = null;
+        this.email = null;
+        this.isAuthorArtis = 0;
+        this.surname = null;
+        this.age = 0;
+    }
 }

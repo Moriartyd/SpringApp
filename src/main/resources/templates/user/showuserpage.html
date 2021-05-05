@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User</title>
+</head>
+<body>
+<div>
+    <h3>Логин:</h3>
+    <p th:text="${user.getLogin()}">VALUE</p>
+</div>
+<div>
+    <h3>Почта:</h3>
+    <p th:text="${user.getPassword()}">VALUE</p>
+</div>
+<div>
+    <h3>Имя:</h3>
+    <p th:text="${user.getName()}">VALUE</p>
+</div>
+<div>
+    <h3>Фамилия:</h3>
+    <p th:text="${user.getSurname()}">VALUE</p>
+</div>
+<div>
+    <h3>Возраст:</h3>
+    <p th:text="${user.getAge()}">VALUE</p>
+</div>
+
+</body>
+</html>
