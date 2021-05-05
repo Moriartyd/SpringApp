@@ -1,6 +1,5 @@
-package ru.galeev.springapp.persistence.entity;
+package ru.galeev.springapp.persistence.domain;
 
-import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

@@ -1,10 +1,9 @@
-package ru.galeev.springapp.persistence.entity;
+package ru.galeev.springapp.persistence.domain;
 
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package ru.galeev.springapp.persistence.entity;
+package ru.galeev.springapp.persistence.domain;
 
 import lombok.Getter;
 import lombok.Setter;
