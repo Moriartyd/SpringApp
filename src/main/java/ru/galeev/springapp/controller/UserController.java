@@ -7,6 +7,7 @@ import ru.galeev.springapp.persistence.domain.User;
 import ru.galeev.springapp.persistence.repository.UserRepository;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/user")
@@ -15,9 +16,25 @@ public class UserController {
     @Autowired
     UserRepository userRepository;
 
-    @GetMapping
+//    @GetMapping
     public List<User> getAllUsers() {
         return userRepository.findAll();
+    }
+
+    @GetMapping("/registration")
+    public String registration() {
+        return "user/registration";
+    }
+
+    @PostMapping("/registration")
+    public String createUser(User user, Map<String, Object> model) {
+        User userFromDb = userRepository.findUserByLogin(user.getLogin());
+        if (userFromDb != null) {
+            model.put("message", "Пользователь уже существует");
+            return "user/registration";
+        }
+        userRepository.saveAndFlush(user);
+        return "redirect:/login";
     }
 
     @GetMapping("{id}")
