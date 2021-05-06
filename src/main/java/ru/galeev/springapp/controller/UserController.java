@@ -2,6 +2,7 @@ package ru.galeev.springapp.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.galeev.springapp.persistence.domain.User;
 import ru.galeev.springapp.persistence.repository.UserRepository;
@@ -27,10 +28,10 @@ public class UserController {
     }
 
     @PostMapping("/registration")
-    public String createUser(User user, Map<String, Object> model) {
+    public String createUser(User user, Model model) {
         User userFromDb = userRepository.findUserByLogin(user.getLogin());
         if (userFromDb != null) {
-            model.put("message", "Пользователь уже существует");
+            model.addAttribute("message", "Пользователь уже существует");
             return "user/registration";
         }
         userRepository.saveAndFlush(user);
@@ -38,7 +39,8 @@ public class UserController {
     }
 
     @GetMapping("{id}")
-    public User getOneUser(@PathVariable("id") User user) {
-        return user;
+    public String getOneUser(@PathVariable("id") User user, Model model) {
+        model.addAttribute("user", user);
+        return "user/id";
     }
 }

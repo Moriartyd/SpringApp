@@ -1,20 +1,14 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<html lang="en">
 <head>
   <title>Вход</title>
 </head>
 <body>
-<!--<div th:if="${param.error}">-->
-<!--  Invalid username and password.-->
-<!--</div>-->
-<!--<div th:if="${param.logout}">-->
-<!--  You have been logged out.-->
-<!--</div>-->
 <form action="/login" method="post">
   <div><label> User Name : <input type="text" name="username"/> </label></div>
   <div><label> Password: <input type="password" name="password"/> </label></div>
   <div><input type="submit" value="Log In"/></div>
-    <input type="hidden" name="_csrf" value="{{_csrf.token}}">
+  <input type="hidden" name="_csrf" value="${_csrf.token}">
 </form>
 </body>
 </html>

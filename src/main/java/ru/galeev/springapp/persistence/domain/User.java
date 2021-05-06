@@ -43,11 +43,6 @@ public class User {
     private String email;
 
     @Getter
-    @Setter
-    @Column(name = "role")
-    private int isAuthorArtis; // 0 - никто; 1 - Артист
-
-    @Getter
     @ManyToMany(cascade = { CascadeType.ALL })
     @JoinTable(
             name = "relation_events_users",
@@ -79,13 +74,23 @@ public class User {
     @Column(name = "age")
     private int age;
 
+    @Getter
+    @Setter
+    @Column(name = "active")
+    private boolean active;
+
+    @Getter
+    @Setter
+    @Column(name = "role")
+    private String role;
+
     public User(String login, String password) {
         this.login = login;
         this.password = password;
         this.name = null;
         this.email = null;
-        this.isAuthorArtis = 0;
         this.surname = null;
         this.age = 0;
+        this.role = "USER";
     }
 }
