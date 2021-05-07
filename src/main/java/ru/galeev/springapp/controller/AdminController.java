@@ -5,14 +5,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.galeev.springapp.persistence.domain.Role;
-import ru.galeev.springapp.persistence.domain.User;
+import ru.galeev.springapp.persistence.domain.*;
 import ru.galeev.springapp.persistence.repository.UserRepository;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
@@ -23,9 +19,10 @@ public class AdminController {
     @Autowired
     UserRepository userRepository;
 
-    @GetMapping("/show_users")
+    @GetMapping
     public String getAllUsers(Model model) {
         List<User> userList = userRepository.findAll();
+        userList.sort(User.COMPARE_BY_ID);
         model.addAttribute("users", userList);
         return "admin/userList";
     }
@@ -35,6 +32,12 @@ public class AdminController {
         model.addAttribute("user", user);
         model.addAttribute("roles", Role.values());
         return "admin/userEdit";
+    }
+
+    @PostMapping("/user/{id}/delete")
+    public String deleteUser(@PathVariable(value = "id", required = true) User user) {
+        userRepository.delete(user);
+        return "redirect:/admin";
     }
 
     @PostMapping("user/{id}")
@@ -52,6 +55,6 @@ public class AdminController {
             }
         }
         userRepository.saveAndFlush(user);
-        return "redirect:/admin/show_users";
+        return "redirect:/admin";
     }
 }

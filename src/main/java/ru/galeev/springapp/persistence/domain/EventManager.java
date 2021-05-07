@@ -36,7 +36,11 @@ public class EventManager {
     private int priceRangeMax; //диапазон цены за вход
 
     @Getter
-    @ManyToMany(cascade = { CascadeType.ALL })
+    @ManyToMany(cascade = {
+            CascadeType.DETACH,
+            CascadeType.MERGE,
+            CascadeType.REFRESH,
+            CascadeType.PERSIST })
     @JoinTable(
             name = "relation_events_event_managers",
             joinColumns = { @JoinColumn(name = "event") },

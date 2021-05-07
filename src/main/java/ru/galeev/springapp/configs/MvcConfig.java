@@ -1,4 +1,4 @@
-package ru.galeev.springapp.configs.security;
+package ru.galeev.springapp.configs;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;

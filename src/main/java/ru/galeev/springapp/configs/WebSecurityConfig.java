@@ -1,6 +1,7 @@
-package ru.galeev.springapp.configs.security;
+package ru.galeev.springapp.configs;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -23,13 +24,17 @@ import javax.sql.DataSource;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
+    @Qualifier("userDetailService")
+    UserDetailsService userDetailsService;
+
+    @Autowired
     private DataSource dataSource;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                    .antMatchers("/", "/user/registration").permitAll()
+                    .antMatchers("/", "/user/registration", "/activate/*").permitAll()
                     .anyRequest().authenticated()
                 .and()
                     .formLogin()
@@ -42,12 +47,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .permitAll();
     }
 
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService).passwordEncoder(NoOpPasswordEncoder.getInstance());
+    }
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.jdbcAuthentication()
-                .dataSource(dataSource)
+        auth.userDetailsService(userDetailsService)
                 .passwordEncoder(NoOpPasswordEncoder.getInstance())
-                .usersByUsernameQuery("select login, password, active from users where login=?")
-                .authoritiesByUsernameQuery("select login, role from users where login=?");
+                .and()
+                    .jdbcAuthentication()
+                    .dataSource(dataSource)
+                    .passwordEncoder(NoOpPasswordEncoder.getInstance())
+                    .usersByUsernameQuery("select login, password, active from users where login=?")
+                    .authoritiesByUsernameQuery("select login, role from users where login=?");
     }
 }

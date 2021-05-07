@@ -3,15 +3,17 @@ package ru.galeev.springapp.persistence.domain;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 
-import java.util.List;
+import java.util.*;
 
 @Entity
 @NoArgsConstructor
 @Table(name = "Users")
-public class User {
+public class User implements UserDetails {
     @Id
     @Getter
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,7 +45,11 @@ public class User {
     private String email;
 
     @Getter
-    @ManyToMany(cascade = { CascadeType.ALL })
+    @ManyToMany(cascade = {
+            CascadeType.DETACH,
+            CascadeType.MERGE,
+            CascadeType.REFRESH,
+            CascadeType.PERSIST })
     @JoinTable(
             name = "relation_events_users",
             joinColumns = { @JoinColumn(name = "event") },
@@ -52,16 +58,24 @@ public class User {
     private List<Event> userRegisteredEvents;
 
     @Getter
-    @ManyToMany(cascade = { CascadeType.ALL })
+    @ManyToMany(cascade = {
+            CascadeType.DETACH,
+            CascadeType.MERGE,
+            CascadeType.REFRESH,
+            CascadeType.PERSIST })
     @JoinTable(
-            name = "relation_events_event_artists",
+            name = "relation_events_artists",
             joinColumns = { @JoinColumn(name = "event") },
             inverseJoinColumns = { @JoinColumn(name = "artist") }
     )
     private List<Event> artistRegisteredEvents;
 
     @Getter
-    @ManyToMany(cascade = { CascadeType.ALL })
+    @ManyToMany(cascade = {
+            CascadeType.DETACH,
+            CascadeType.MERGE,
+            CascadeType.REFRESH,
+            CascadeType.PERSIST })
     @JoinTable(
             name = "user_friendships",
             joinColumns = { @JoinColumn(name = "user_1") },
@@ -74,23 +88,74 @@ public class User {
     @Column(name = "age")
     private int age;
 
-    @Getter
     @Setter
     @Column(name = "active")
     private boolean active;
+
+    public boolean isActive() {
+        return active;
+    }
 
     @Getter
     @Setter
     @Column(name = "role")
     private String role;
 
-    public User(String login, String password) {
-        this.login = login;
-        this.password = password;
-        this.name = null;
-        this.email = null;
-        this.surname = null;
-        this.age = 0;
-        this.role = "USER";
+    @Getter
+    @Setter
+    @Column(name = "activation_code")
+    private String activationCode;
+
+    public boolean isAdmin() {
+        return role.equals(Role.ADMIN.getAuthority());
     }
+
+    public boolean isManager() {
+        return role.equals(Role.MANAGER.getAuthority());
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        Set<Role> roleSet = new HashSet<Role>();
+        Set<String> roleSetString = Role.ADMIN.getSetString();
+        for (String r : roleSetString) {
+            if (this.role.equals(r)) {
+                roleSet.add(Role.valueOf(r));
+            }
+        }
+        return roleSet;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.login;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return isActive();
+    }
+
+    public static final Comparator<User> COMPARE_BY_ID = new Comparator<User>() {
+        @Override
+        public int compare(User o1, User o2) {
+            return (int) (o1.getId() - o2.getId());
+        }
+    };
+
 }

@@ -1,12 +1,10 @@
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Main</title>
-</head>
+<#import "parts/common.ftlh" as c>
+
+<@c.page "Добро пожаловать">
 <body>
     <div>
         <form method="post" action="/logout">
-            <input type="submit" value="Выйти">
+            <input type="submit" value="Выйти" class="btn btn-primary">
             <input type="hidden" name="_csrf" value="${_csrf.token}">
         </form>
     </div>
@@ -17,5 +15,4 @@
 <#--        <if ${usr.role} == "ADMIN"><a href="/admin/user/${user.id}"> Изменить </a></if>-->
     </div>
 </#list>
-</body>
-</html>
+</@c.page>
