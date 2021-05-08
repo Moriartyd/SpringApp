@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import ru.galeev.springapp.enums.Role;
 
 import javax.persistence.*;
 
@@ -52,8 +53,8 @@ public class User implements UserDetails {
             CascadeType.PERSIST })
     @JoinTable(
             name = "relation_events_users",
-            joinColumns = { @JoinColumn(name = "event") },
-            inverseJoinColumns = { @JoinColumn(name = "user") }
+            joinColumns = { @JoinColumn(name = "user_id") },
+            inverseJoinColumns = { @JoinColumn(name = "event_id") }
     )
     private List<Event> userRegisteredEvents;
 
@@ -65,8 +66,8 @@ public class User implements UserDetails {
             CascadeType.PERSIST })
     @JoinTable(
             name = "relation_events_artists",
-            joinColumns = { @JoinColumn(name = "event") },
-            inverseJoinColumns = { @JoinColumn(name = "artist") }
+            joinColumns = { @JoinColumn(name = "artist") },
+            inverseJoinColumns = { @JoinColumn(name = "event") }
     )
     private List<Event> artistRegisteredEvents;
 
@@ -82,6 +83,15 @@ public class User implements UserDetails {
             inverseJoinColumns = { @JoinColumn(name = "user_2") }
     )
     private List<User> friends;
+
+    @Getter
+    @ManyToMany
+    @JoinTable(
+            name = "relation_events_event_managers",
+            joinColumns = { @JoinColumn(name = "manager") },
+            inverseJoinColumns = { @JoinColumn(name = "event") }
+    )
+    private List<Event> eventList = new ArrayList<Event>();
 
     @Getter
     @Setter
@@ -103,6 +113,11 @@ public class User implements UserDetails {
 
     @Getter
     @Setter
+    @OneToMany(mappedBy = "owner")
+    private List<Place> placeList = new ArrayList<Place>();
+
+    @Getter
+    @Setter
     @Column(name = "activation_code")
     private String activationCode;
 
@@ -112,6 +127,10 @@ public class User implements UserDetails {
 
     public boolean isManager() {
         return role.equals(Role.MANAGER.getAuthority());
+    }
+
+    public boolean isPlace() {
+        return role.equals(Role.PLACE.getAuthority());
     }
 
     @Override

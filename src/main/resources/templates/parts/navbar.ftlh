@@ -22,6 +22,22 @@
                     <a class="nav-link" aria-current="page" href="/admin">Администрирование</a>
                 </li>
                 </#if>
+                <#if isManager>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="/events/managing/registration">Новое мероприятие</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="/events/managing/my_events">Мои мероприятия</a>
+                    </li>
+                </#if>
+                <#if isPlace>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="/place/managing/registration">Новое место</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="/place/managing/my_places">Мои места</a>
+                    </li>
+                </#if>
             </ul>
             <div class="navbar-text">${login}</div>
         </div>

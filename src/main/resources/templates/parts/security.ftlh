@@ -7,6 +7,7 @@
         login = u.getLogin()
         isAdmin = u.isAdmin()
         isManager = u.isManager()
+        isPlace = u.isPlace()
         user_id = u.getId()
     >
 <#else>
@@ -14,6 +15,7 @@
         login = "unknown"
         isAdmin = false
         isManager = false
+        isPlace = false
         user_id = -1
     >
 </#if>

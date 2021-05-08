@@ -12,8 +12,13 @@ public class Place {
 
     @Id
     @Getter
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    @Getter
+    @Setter
+    @Column(name = "name")
+    private String name;
 
     @Getter
     @Setter
@@ -39,4 +44,10 @@ public class Place {
     @Setter
     @Column(name = "rating")
     private double rating;
+
+    @Getter
+    @Setter
+    @ManyToOne
+    @JoinColumn (name="owner")
+    private User owner;
 }

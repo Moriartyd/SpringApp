@@ -35,18 +35,18 @@ public class EventManager {
     @Column(name = "max_price")
     private int priceRangeMax; //диапазон цены за вход
 
-    @Getter
-    @ManyToMany(cascade = {
-            CascadeType.DETACH,
-            CascadeType.MERGE,
-            CascadeType.REFRESH,
-            CascadeType.PERSIST })
-    @JoinTable(
-            name = "relation_events_event_managers",
-            joinColumns = { @JoinColumn(name = "event") },
-            inverseJoinColumns = { @JoinColumn(name = "manager") }
-    )
-    private List<Event> eventList;//DONE
+//    @Getter
+//    @ManyToMany(cascade = {
+//            CascadeType.DETACH,
+//            CascadeType.MERGE,
+//            CascadeType.REFRESH,
+//            CascadeType.PERSIST })
+//    @JoinTable(
+//            name = "relation_events_event_managers",
+//            joinColumns = { @JoinColumn(name = "event") },
+//            inverseJoinColumns = { @JoinColumn(name = "manager") }
+//    )
+//    private List<Event> eventList;//DONE
 
 //    private double averageEventRating; //
 }

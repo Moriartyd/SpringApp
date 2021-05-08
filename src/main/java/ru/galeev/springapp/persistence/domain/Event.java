@@ -2,8 +2,12 @@ package ru.galeev.springapp.persistence.domain;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.transaction.annotation.Propagation;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -13,7 +17,7 @@ public class Event {
 
     @Id
     @Getter
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Getter
@@ -24,6 +28,7 @@ public class Event {
     @Getter
     @Setter
     @Column(name = "time")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private Date time; // Время проведения
 
     @Getter
@@ -42,14 +47,20 @@ public class Event {
     @Column(name = "music")
     private int music; // Жанр музыки
 
-    @ManyToMany(mappedBy = "eventList")
-    private List<EventManager> eventManager; // Организатор мероприятия
+    @Getter
+    @Setter
+    @ManyToMany
+    @JoinTable(
+            name = "relation_events_event_managers",
+            joinColumns = { @JoinColumn(name = "event") },
+            inverseJoinColumns = { @JoinColumn(name = "manager") })
+    private List<User> eventManager = new ArrayList<User>(); // Организатор мероприятия
 
     @ManyToMany(mappedBy = "artistRegisteredEvents")
-    private List<User> artistList; // Приглашенные звезды
+    private List<User> artistList = new ArrayList<User>();; // Приглашенные звезды
 
     @ManyToMany(mappedBy = "userRegisteredEvents")
-    private List<User> userList;
+    private List<User> userList = new ArrayList<User>();;
 
     @Getter
     @Setter
@@ -75,4 +86,9 @@ public class Event {
     @Setter
     @Column(name = "min_age")
     private int minAge; // Возрастное ограничение
+
+    @Getter
+    @Setter
+    @Column(name = "active")
+    private int active;
 }

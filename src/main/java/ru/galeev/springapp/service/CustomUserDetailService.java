@@ -5,7 +5,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import ru.galeev.springapp.persistence.domain.Role;
+import ru.galeev.springapp.enums.Role;
 import ru.galeev.springapp.persistence.domain.User;
 import ru.galeev.springapp.persistence.repository.UserRepository;
 

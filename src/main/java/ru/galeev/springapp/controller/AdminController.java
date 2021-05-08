@@ -5,6 +5,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ru.galeev.springapp.enums.Role;
 import ru.galeev.springapp.persistence.domain.*;
 import ru.galeev.springapp.persistence.repository.UserRepository;
 

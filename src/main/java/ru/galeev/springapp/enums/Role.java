@@ -1,4 +1,4 @@
-package ru.galeev.springapp.persistence.domain;
+package ru.galeev.springapp.enums;
 
 import org.springframework.security.core.GrantedAuthority;
 
@@ -9,7 +9,8 @@ import java.util.stream.Collectors;
 public enum Role implements GrantedAuthority {
     USER,
     MANAGER,
-    ADMIN;
+    ADMIN,
+    PLACE;
 
     @Override
     public String getAuthority() {
