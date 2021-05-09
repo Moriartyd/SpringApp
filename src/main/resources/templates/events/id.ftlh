@@ -1,8 +1,8 @@
 <#import "../parts/common.ftlh" as c>
 <#include "../parts/security.ftlh">
 <@c.page "Мероприятие ${event.name}">
-    <#if isManager>
-        <form method="post" action="/events/managing/${event.id}">
+    <#if canEdit == true && isManager>
+        <form method="post" action="/events/managing/event/${event.id}">
     <div class="mb-3 align-items-center">
         <div class="col-auto">
             <label for="name" class="col-form-label"> Название : </label>
@@ -15,15 +15,25 @@
             <label for="time" class="col-form-label"> Время проведения : </label>
         </div>
         <div class="col-auto">
-            <input type="date" id="time" name="time" class="form-control" value="${event.time}"/>
+            <input type="datetime-local" id="time" name="time" class="form-control" value="${time}"/>
         </div>
 
-<#--        <div class="col-auto">-->
-<#--            <label for="placeName" class="col-form-label"> Место : </label>-->
-<#--        </div>-->
-<#--        <div class="col-auto">-->
-<#--            <input type="text" id="placeName" name="place" class="form-control" value="${event.place.name}"/>-->
-<#--        </div>-->
+        <div class="col-auto">
+            <label for="placeName" class="col-form-label"> Место : </label>
+        </div>
+        <div class="col-auto">
+            <select id="placeName" name="place" class="form-select" aria-label="Default select example">
+                <option>Выберите место</option>
+                <option value="null">Моего места нет в списке</option>
+                <#list places as place>
+                    <#if place.name == event.place.name>
+                        <option selected value="${place.id}">${place.name}</option>
+                    <#else>
+                        <option value="${place.id}">${place.name}</option>
+                    </#if>
+                </#list>
+            </select>
+        </div>
 
         <div class="col-auto">
             <label for="cost" class="col-form-label"> Цена за вход : </label>
@@ -42,7 +52,7 @@
             <input type="submit" id="but" value="Изменить" class="btn btn-primary"/>
             <input type="hidden" name="_csrf" value="${_csrf.token}">
         </form>
-        <#else>
+    <#else>
             <ol class="list-group list-group-numbered">
                 <li class="list-group-item d-flex justify-content-between align-items-start">
                     <div class="ms-2 me-auto">
@@ -56,12 +66,12 @@
                         ${event.time}
                     </div>
                 </li>
-<#--                <li class="list-group-item d-flex justify-content-between align-items-start">-->
-<#--                    <div class="ms-2 me-auto">-->
-<#--                        <div class="fw-bold">Место</div>-->
-<#--                        ${event.place.name}-->
-<#--                    </div>-->
-<#--                </li>-->
+                <li class="list-group-item d-flex justify-content-between align-items-start">
+                    <div class="ms-2 me-auto">
+                        <div class="fw-bold">Место</div>
+                        <a href="/place/${event.place.id}">${event.place.name}</a>
+                    </div>
+                </li>
                 <li class="list-group-item d-flex justify-content-between align-items-start">
                     <div class="ms-2 me-auto">
                         <div class="fw-bold">Цена за вход</div>

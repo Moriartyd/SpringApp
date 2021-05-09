@@ -25,6 +25,7 @@ public class EventController {
     @GetMapping("/{id}")
     public String getEventInfo(@PathVariable("id")Event event, Model model) {
         model.addAttribute("event", event);
+        model.addAttribute("canEdit", false);
         return "events/id";
     }
 

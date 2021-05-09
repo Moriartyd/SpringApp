@@ -91,4 +91,23 @@ public class Event {
     @Setter
     @Column(name = "active")
     private int active;
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Event)) {
+            return false;
+        }
+        if (this.getId() == ((Event)obj).getId()) {
+            return true;
+        }
+        if (this.hashCode() == ((Event)obj).hashCode()) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return String.valueOf(this.id).hashCode() + this.name.hashCode();
+    }
 }

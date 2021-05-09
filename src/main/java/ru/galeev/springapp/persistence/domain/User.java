@@ -177,4 +177,17 @@ public class User implements UserDetails {
         }
     };
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof User) {
+            return ((User) obj).getId() == this.id;
+        }
+        return false;
+    }
+
+//    @Override
+//    public int hashCode() {
+//        return this.login.hashCode() + this.email.hashCode();
+//    }
+
 }

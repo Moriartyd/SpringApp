@@ -36,6 +36,12 @@ public class PlaceManagerController {
         return "place/placeList";
     }
 
+    @GetMapping("/{id}")
+    public String getOnePlace(@PathVariable("id") Place place, Model model) {
+        model.addAttribute("place", place);
+        return "place/id";
+    }
+
     @PostMapping("/registration")
     public String createPlace(Place place) {
         User owner = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

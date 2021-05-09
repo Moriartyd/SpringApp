@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ru.galeev.springapp.persistence.domain.Event;
+import ru.galeev.springapp.persistence.repository.EventRepository;
 import ru.galeev.springapp.persistence.repository.UserRepository;
 import ru.galeev.springapp.persistence.domain.User;
 import ru.galeev.springapp.service.CustomUserDetailService;
@@ -16,6 +18,8 @@ public class MainController {
     @Autowired
     UserRepository userRepository;
     @Autowired
+    EventRepository eventRepository;
+    @Autowired
     CustomUserDetailService userService;
 
     @GetMapping("/")
@@ -25,8 +29,8 @@ public class MainController {
 
     @GetMapping("/main")
     public String main(Model model) {
-        List<User> userList = userRepository.findAll();
-        model.addAttribute("users", userList);
+        List<Event> eventList = eventRepository.findAll();
+        model.addAttribute("events", eventList);
         return "main";
     }
 
