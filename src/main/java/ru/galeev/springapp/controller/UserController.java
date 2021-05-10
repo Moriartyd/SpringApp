@@ -34,6 +34,9 @@ public class UserController {
     @GetMapping("{id}")
     public String getOneUser(@PathVariable("id") User user, Model model) {
         model.addAttribute("user", user);
+        model.addAttribute("event_cnt", user.getUserRegisteredEvents().size());
+        model.addAttribute("followers_cnt", user.getFriends().size());
+        model.addAttribute("subscriptions_cnt", user.getFriends().size());
         return "user/id";
     }
 }

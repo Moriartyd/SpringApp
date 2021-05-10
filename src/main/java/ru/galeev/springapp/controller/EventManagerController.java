@@ -2,12 +2,9 @@ package ru.galeev.springapp.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.Transient;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.galeev.springapp.persistence.domain.Event;
@@ -16,9 +13,7 @@ import ru.galeev.springapp.persistence.repository.EventRepository;
 import ru.galeev.springapp.persistence.repository.PlaceRepository;
 import ru.galeev.springapp.persistence.repository.UserRepository;
 import ru.galeev.springapp.utils.DateFormatter;
-import ru.galeev.springapp.utils.ListUtils;
 
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Controller
@@ -40,17 +35,20 @@ public class EventManagerController {
     }
 
     @PostMapping("/registration")
-    public String createEvent(Event event, Model model) {
+    public String createEvent(Event event,
+                              Model model,
+                              Authentication auth) {
         event.setActive(1);
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = (User) auth.getPrincipal();
         event.getEventManager().add(user);
         eventRepository.saveAndFlush(event);
         return "redirect:/events/managing/my_events";
     }
 
     @GetMapping("/my_events")
-    public String getEventList(Model model) {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    public String getEventList(Model model,
+                               Authentication auth) {
+        User user = (User) auth.getPrincipal();
         List<Event> eventList = eventRepository.findEventsByEventManager(user);
         model.addAttribute("eventList", eventList);
         return "events/eventList";
@@ -61,7 +59,6 @@ public class EventManagerController {
     public String getOneEvent(@PathVariable("id") Event event,
                               Authentication auth,
                               Model model) {
-//        User user = userRepository.findUserByEventList(event);
         model.addAttribute("canEdit",event.getEventManager().contains(((User) auth.getPrincipal())));
         model.addAttribute("event", event);
         model.addAttribute("time", DateFormatter.getHtmlDate(event.getTime()));
