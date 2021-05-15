@@ -32,7 +32,12 @@ public class Place {
 
     @Getter
     @Setter
-    @OneToMany(mappedBy = "place", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "place", cascade = {
+            CascadeType.DETACH,
+            CascadeType.MERGE,
+            CascadeType.REFRESH,
+            CascadeType.PERSIST }, fetch = FetchType.LAZY)
+    
     private List<Event> eventList;
 
     @Getter

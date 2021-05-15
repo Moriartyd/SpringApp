@@ -39,7 +39,12 @@
                     </li>
                 </#if>
             </ul>
-            <div class="navbar-text">${login}</div>
+            <#if known>
+            <form method="post" action="/logout">
+                <input type="submit" value="Выйти" class="btn btn-primary">
+                <input type="hidden" name="_csrf" value="${_csrf.token}">
+            </form>
+            </#if>
         </div>
     </div>
 </nav>

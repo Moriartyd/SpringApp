@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import ru.galeev.springapp.persistence.domain.Event;
 import ru.galeev.springapp.persistence.domain.Place;
 import ru.galeev.springapp.persistence.domain.User;
+import ru.galeev.springapp.persistence.repository.EventRepository;
 import ru.galeev.springapp.persistence.repository.PlaceRepository;
 
 import java.util.List;
@@ -22,6 +24,8 @@ public class PlaceManagerController {
 
     @Autowired
     PlaceRepository placeRepository;
+    @Autowired
+    EventRepository eventRepository;
 
     @GetMapping("/registration")
     public String getRegistrationForm() {
@@ -39,6 +43,7 @@ public class PlaceManagerController {
     @GetMapping("/{id}")
     public String getOnePlace(@PathVariable("id") Place place, Model model) {
         model.addAttribute("place", place);
+        model.addAttribute("event_cnt", eventRepository.findEventsByPlace(place).size());
         return "place/id";
     }
 
@@ -52,6 +57,12 @@ public class PlaceManagerController {
 
     @PostMapping("{id}/delete")
     public String deletePlace(@PathVariable("id") Place place) {
+        Place servicePlace = placeRepository.getServicePlace();
+        List<Event> eventList = eventRepository.findEventsByPlace(place);
+        for (Event event : eventList) {
+            event.setPlace(servicePlace);
+            eventRepository.saveAndFlush(event);
+        }
         placeRepository.delete(place);
         return "redirect:/place/managing/my_places";
     }

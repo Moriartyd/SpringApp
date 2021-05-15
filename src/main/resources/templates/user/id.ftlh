@@ -18,7 +18,7 @@
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">На меня подписаны</h5>
-                            <h6 class="card-text"><a href="#">${followers_cnt}</a> пользователей</h6>
+                            <h6 class="card-text"><a href="/user/${user.id}/followers">${followers_cnt}</a> пользователей</h6>
 <#--                            <a href="#" class="btn btn-primary">Посмотреть</a>-->
                         </div>
                     </div>
@@ -27,7 +27,7 @@
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">Я подписан на</h5>
-                            <h6 class="card-text"><a href="#">${subscriptions_cnt}</a> пользователей</h6>
+                            <h6 class="card-text"><a href="/user/${user.id}/subs">${subscriptions_cnt}</a> пользователей</h6>
 <#--                        <a href="#" class="btn btn-primary">Посмотреть</a>-->
                         </div>
                     </div>
@@ -38,16 +38,35 @@
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">Я собираюсь посетить</h5>
-                            <h6 class="card-text"><a href="#">${event_cnt}</a> мероприятий</h6>
+                            <h6 class="card-text"><a href="/user/${user.id}/events">${event_cnt}</a> мероприятий</h6>
 <#--                        <a href="#" class="btn btn-primary">Посмотреть</a>-->
                         </div>
                     </div>
                 </div>
+                <#if user.role == "MANAGER">
+                    <div class="col">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Я организовал</h5>
+                                <h6 class="card-text"><a href="/user/${user.id}/managed_events">${managed_events_cnt}</a> мероприятий</h6>
+                                <#--                        <a href="#" class="btn btn-primary">Посмотреть</a>-->
+                            </div>
+                        </div>
+                    </div>
+                </#if>
             </div>
         </div>
     <#if user.id == user_id>
         <a href="#" class="btn btn-primary">Редактировать</a>
     <#else>
-        <a href="#" class="btn btn-primary">Подписаться</a>
+        <#if isSubscription>
+            <form method="post" action="/user/${user.id}/unFollow">
+                <input type="submit" class="btn btn-primary" value="Отписаться"/>
+        <#else>
+            <form method="post" action="/user/${user.id}/follow">
+                <input type="submit" class="btn btn-primary" value="Подписаться"/>
+        </#if>
+            <input type="hidden" name="_csrf" value="${_csrf.token}">
+        </form>
     </#if>
 </@c.page>

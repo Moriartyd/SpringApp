@@ -6,19 +6,23 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.galeev.springapp.enums.Role;
+import ru.galeev.springapp.persistence.domain.Event;
 import ru.galeev.springapp.persistence.domain.User;
 import ru.galeev.springapp.persistence.repository.UserRepository;
 
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service("userDetailService")
-public class CustomUserDetailService implements UserDetailsService {
+public class UserService implements UserDetailsService {
+
     @Autowired
     UserRepository userRepository;
     @Autowired
     MailService mailService;
 
     private final String link = "http://192.168.1.70:8090";
+
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         return userRepository.findUserByLogin(s);
@@ -55,5 +59,46 @@ public class CustomUserDetailService implements UserDetailsService {
         user.setActive(true);
         userRepository.saveAndFlush(user);
         return true;
+    }
+
+    public List<User> getUserList(List<User> list) {
+        return list.isEmpty() ? null : list;
+    }
+
+    public List<Event> getEventList(List<Event> list) {
+        return list.isEmpty() ? null : list;
+    }
+
+    public void followUser(User obj, User user) {
+        obj.getFollowers().add(user);
+        userRepository.saveAndFlush(obj);
+    }
+
+    public void unFollowUser(User obj, User user) {
+        obj.getFollowers().remove(user);
+        userRepository.saveAndFlush(obj);
+    }
+
+    public List<User> getAllUsers() {
+        List<User> userList = userRepository.findAll();
+        userList.sort(User.COMPARE_BY_ID);
+        return userList;
+    }
+
+    public void deleteUser(User user) {
+        userRepository.delete(user);
+    }
+
+    public void editUser(User user, String login, Map<String, String> form) {
+        user.setLogin(login);
+        Set<String> roles = Arrays.stream(Role.values())
+                .map(Role::name)
+                .collect(Collectors.toSet());
+        for (String key : form.keySet()) {
+            if (roles.contains(key)) {
+                user.setRole(Role.valueOf(key).getAuthority());
+            }
+        }
+        userRepository.saveAndFlush(user);
     }
 }

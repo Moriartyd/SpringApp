@@ -9,7 +9,7 @@
                         <i>${user.id}</i>
                     </div>
                     <div class="col">
-                        <a href="admin/user/${user.id}">${user.login}</a>
+                        <a href="/admin/user/${user.id}">${user.login}</a>
                     </div>
                     <div class="col">
                         ${user.role}

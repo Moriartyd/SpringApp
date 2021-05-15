@@ -53,43 +53,65 @@
             <input type="hidden" name="_csrf" value="${_csrf.token}">
         </form>
     <#else>
-            <ol class="list-group list-group-numbered">
-                <li class="list-group-item d-flex justify-content-between align-items-start">
-                    <div class="ms-2 me-auto">
-                        <div class="fw-bold">Название</div>
+        <ol class="list-group list-group-numbered">
+            <li class="list-group-item d-flex justify-content-between align-items-start">
+                <div class="ms-2 me-auto">
+                    <div class="fw-bold">Название</div>
                         ${event.name}
-                    </div>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-start">
-                    <div class="ms-2 me-auto">
-                        <div class="fw-bold">Время проведения</div>
-                        ${event.time}
-                    </div>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-start">
-                    <div class="ms-2 me-auto">
-                        <div class="fw-bold">Место</div>
-                        <a href="/place/${event.place.id}">${event.place.name}</a>
-                    </div>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-start">
-                    <div class="ms-2 me-auto">
-                        <div class="fw-bold">Цена за вход</div>
-                        ${event.cost}
-                    </div>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-start">
-                    <div class="ms-2 me-auto">
-                        <div class="fw-bold">Минимальный возраст</div>
-                        ${event.cost}
-                    </div>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-start">
-                    <div class="ms-2 me-auto">
-                        <div class="fw-bold">Средний чек</div>
-                        ${event.middlePrice}
-                    </div>
-                </li>
-            </ol>
+                </div>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-start">
+                <div class="ms-2 me-auto">
+                    <div class="fw-bold">Время проведения</div>
+                    ${event.time}
+                </div>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-start">
+                <div class="ms-2 me-auto">
+                    <div class="fw-bold">Место</div>
+                    <a href="/place/${event.place.id}">${event.place.name}</a>
+                </div>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-start">
+                <div class="ms-2 me-auto">
+                    <div class="fw-bold">Цена за вход</div>
+                    ${event.cost}
+                </div>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-start">
+                <div class="ms-2 me-auto">
+                    <div class="fw-bold">Минимальный возраст</div>
+                    ${event.cost}
+                </div>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-start">
+                <div class="ms-2 me-auto">
+                    <div class="fw-bold">Средний чек</div>
+                    ${event.middlePrice}
+                </div>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-start">
+                <div class="ms-2 me-auto">
+                    <div class="fw-bold">Количество посетителей</div>
+                    <a href="/events/${event.id}/visitors">${event.registeredVisitors}</a>
+                </div>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-start">
+                <div class="ms-2 me-auto">
+                    <div class="fw-bold">Количество посетителей на которых вы подписаны</div>
+                    <a href="/events/${event.id}/subs_visitors">${friends}</a>
+                </div>
+            </li>
+        </ol>
+        <br/>
+        <#if isSub>
+            <form method="post" action="/events/${event.id}/unFollow">
+            <input type="submit" class="btn btn-primary" value="Отписаться"/>
+        <#else>
+            <form method="post" action="/events/${event.id}/follow">
+            <input type="submit" class="btn btn-primary" value="Подписаться"/>
+        </#if>
+        <input type="hidden" name="_csrf" value="${_csrf.token}">
+        </form>
     </#if>
 </@c.page>

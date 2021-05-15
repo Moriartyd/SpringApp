@@ -46,11 +46,7 @@ public class User implements UserDetails {
     private String email;
 
     @Getter
-    @ManyToMany(cascade = {
-            CascadeType.DETACH,
-            CascadeType.MERGE,
-            CascadeType.REFRESH,
-            CascadeType.PERSIST })
+    @ManyToMany
     @JoinTable(
             name = "relation_events_users",
             joinColumns = { @JoinColumn(name = "user_id") },
@@ -72,17 +68,22 @@ public class User implements UserDetails {
     private List<Event> artistRegisteredEvents;
 
     @Getter
-    @ManyToMany(cascade = {
-            CascadeType.DETACH,
-            CascadeType.MERGE,
-            CascadeType.REFRESH,
-            CascadeType.PERSIST })
+    @ManyToMany
     @JoinTable(
-            name = "user_friendships",
-            joinColumns = { @JoinColumn(name = "user_1") },
-            inverseJoinColumns = { @JoinColumn(name = "user_2") }
+            name = "user_followers",
+            joinColumns = { @JoinColumn(name = "user_id") },
+            inverseJoinColumns = { @JoinColumn(name = "follower_id") }
     )
-    private List<User> friends;
+    private List<User> followers;
+
+    @Getter
+    @ManyToMany
+    @JoinTable(
+            name = "user_followers",
+            joinColumns = { @JoinColumn(name = "follower_id") },
+            inverseJoinColumns = { @JoinColumn(name = "user_id") }
+    )
+    private List<User> subscriptions;
 
     @Getter
     @ManyToMany
@@ -174,6 +175,13 @@ public class User implements UserDetails {
         @Override
         public int compare(User o1, User o2) {
             return (int) (o1.getId() - o2.getId());
+        }
+    };
+
+    public static final Comparator<User> COMPARE_BY_LOGIN = new Comparator<User>() {
+        @Override
+        public int compare(User o1, User o2) {
+            return o1.getLogin().compareTo(o2.getLogin());
         }
     };
 

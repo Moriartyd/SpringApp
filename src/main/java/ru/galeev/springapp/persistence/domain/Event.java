@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Propagation;
 import javax.persistence.*;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -33,7 +34,11 @@ public class Event {
 
     @Getter
     @Setter
-    @ManyToOne
+    @ManyToOne(cascade = {
+            CascadeType.DETACH,
+            CascadeType.MERGE,
+            CascadeType.REFRESH,
+            CascadeType.PERSIST })
     @JoinColumn(name = "place_id")
     private Place place; // Место проведения
 
@@ -59,7 +64,13 @@ public class Event {
     @ManyToMany(mappedBy = "artistRegisteredEvents")
     private List<User> artistList = new ArrayList<User>();; // Приглашенные звезды
 
-    @ManyToMany(mappedBy = "userRegisteredEvents")
+    @Getter
+    @ManyToMany
+    @JoinTable(
+            name = "relation_events_users",
+            joinColumns = { @JoinColumn(name = "event_id") },
+            inverseJoinColumns = { @JoinColumn(name = "user_id") }
+    )
     private List<User> userList = new ArrayList<User>();;
 
     @Getter
@@ -105,6 +116,20 @@ public class Event {
         }
         return false;
     }
+
+    public static final Comparator<Event> COMPARE_BY_ID = new Comparator<Event>() {
+        @Override
+        public int compare(Event o1, Event o2) {
+            return (int) (o1.getId() - o2.getId());
+        }
+    };
+
+    public static final Comparator<Event> COMPARE_BY_NAME = new Comparator<Event>() {
+        @Override
+        public int compare(Event o1, Event o2) {
+            return o1.getName().compareTo(o2.getName());
+        }
+    };
 
     @Override
     public int hashCode() {

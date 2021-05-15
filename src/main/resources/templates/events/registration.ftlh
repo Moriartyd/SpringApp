@@ -21,8 +21,8 @@
         </div>
         <div class="col-auto">
             <select name="place" class="form-select" aria-label="Default select example">
-                <option selected>Выберите место</option>
-                <option value="null">Моего места нет в списке</option>
+                <option selected value="61">Выберите место</option>
+<#--                <option value="null">Моего места нет в списке</option>-->
                 <#list places as place>
                 <option value="${place.id}">${place.name}</option>
                 </#list>

@@ -7,10 +7,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.galeev.springapp.enums.Role;
 import ru.galeev.springapp.persistence.domain.*;
-import ru.galeev.springapp.persistence.repository.UserRepository;
+import ru.galeev.springapp.service.UserService;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/admin")
@@ -18,13 +17,11 @@ import java.util.stream.Collectors;
 public class AdminController {
 
     @Autowired
-    UserRepository userRepository;
+    UserService userService;
 
     @GetMapping
     public String getAllUsers(Model model) {
-        List<User> userList = userRepository.findAll();
-        userList.sort(User.COMPARE_BY_ID);
-        model.addAttribute("users", userList);
+        model.addAttribute("users", userService.getAllUsers());
         return "admin/userList";
     }
 
@@ -37,7 +34,7 @@ public class AdminController {
 
     @PostMapping("/user/{id}/delete")
     public String deleteUser(@PathVariable(value = "id", required = true) User user) {
-        userRepository.delete(user);
+        userService.deleteUser(user);
         return "redirect:/admin";
     }
 
@@ -46,16 +43,7 @@ public class AdminController {
             @RequestParam String login,
             @RequestParam Map<String, String> form,
             @PathVariable("id") User user) {
-        user.setLogin(login);
-        Set<String> roles = Arrays.stream(Role.values())
-                .map(Role::name)
-                .collect(Collectors.toSet());
-        for (String key : form.keySet()) {
-            if (roles.contains(key)) {
-                user.setRole(Role.valueOf(key).getAuthority());
-            }
-        }
-        userRepository.saveAndFlush(user);
+        userService.editUser(user, login, form);
         return "redirect:/admin";
     }
 }

@@ -7,8 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.galeev.springapp.persistence.domain.Event;
 import ru.galeev.springapp.persistence.repository.EventRepository;
 import ru.galeev.springapp.persistence.repository.UserRepository;
-import ru.galeev.springapp.persistence.domain.User;
-import ru.galeev.springapp.service.CustomUserDetailService;
+import ru.galeev.springapp.service.UserService;
 
 import java.util.List;
 
@@ -20,7 +19,7 @@ public class MainController {
     @Autowired
     EventRepository eventRepository;
     @Autowired
-    CustomUserDetailService userService;
+    UserService userService;
 
     @GetMapping("/")
     public String greetings() {
@@ -30,6 +29,7 @@ public class MainController {
     @GetMapping("/main")
     public String main(Model model) {
         List<Event> eventList = eventRepository.findAll();
+        eventList.sort(Event.COMPARE_BY_NAME);
         model.addAttribute("events", eventList);
         return "main";
     }

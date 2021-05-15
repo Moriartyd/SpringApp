@@ -8,13 +8,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.galeev.springapp.persistence.domain.Event;
+import ru.galeev.springapp.persistence.domain.Place;
 import ru.galeev.springapp.persistence.domain.User;
-import ru.galeev.springapp.persistence.repository.EventRepository;
-import ru.galeev.springapp.persistence.repository.PlaceRepository;
-import ru.galeev.springapp.persistence.repository.UserRepository;
+import ru.galeev.springapp.service.EventService;
+import ru.galeev.springapp.service.PlaceService;
 import ru.galeev.springapp.utils.DateFormatter;
-
-import java.util.*;
 
 @Controller
 @RequestMapping("/events/managing")
@@ -22,35 +20,27 @@ import java.util.*;
 public class EventManagerController {
 
     @Autowired
-    EventRepository eventRepository;
+    EventService eventService;
     @Autowired
-    PlaceRepository placeRepository;
-    @Autowired
-    UserRepository userRepository;
+    PlaceService placeService;
 
     @GetMapping("/registration")
     public String getRegistrationForm(Model model) {
-        model.addAttribute("places", placeRepository.findAll());
+        model.addAttribute("places", placeService.getAllPlaces());
         return "events/registration";
     }
 
     @PostMapping("/registration")
     public String createEvent(Event event,
-                              Model model,
                               Authentication auth) {
-        event.setActive(1);
-        User user = (User) auth.getPrincipal();
-        event.getEventManager().add(user);
-        eventRepository.saveAndFlush(event);
+        eventService.createEvent(event, (User) auth.getPrincipal());
         return "redirect:/events/managing/my_events";
     }
 
     @GetMapping("/my_events")
     public String getEventList(Model model,
                                Authentication auth) {
-        User user = (User) auth.getPrincipal();
-        List<Event> eventList = eventRepository.findEventsByEventManager(user);
-        model.addAttribute("eventList", eventList);
+        model.addAttribute("eventList", eventService.getEventsByManager((User) auth.getPrincipal()));
         return "events/eventList";
     }
 
@@ -59,17 +49,16 @@ public class EventManagerController {
     public String getOneEvent(@PathVariable("id") Event event,
                               Authentication auth,
                               Model model) {
-        model.addAttribute("canEdit",event.getEventManager().contains(((User) auth.getPrincipal())));
+        model.addAttribute("canEdit", eventService.checkForEditPossibility(event, (User) auth.getPrincipal()));
         model.addAttribute("event", event);
         model.addAttribute("time", DateFormatter.getHtmlDate(event.getTime()));
-        model.addAttribute("places", placeRepository.findAll());
+        model.addAttribute("places", placeService.getAllPlaces());
         return "events/id";
     }
 
     @PostMapping("event/{id}/delete")
     public String deleteEvent(@PathVariable("id") Event event) {
-        event.setActive(0);
-        eventRepository.saveAndFlush(event);
+        eventService.archiveEvent(event);
         return "redirect:/events/managing/my_events";
     }
 
@@ -78,12 +67,9 @@ public class EventManagerController {
                             @RequestParam("name") String name,
                             @RequestParam("time") String time,
                             @RequestParam("cost") int cost,
-                            @RequestParam("minAge") int minAge) {
-        event.setName(name);
-        event.setTime(DateFormatter.fromHtmlDate(time));
-        event.setCost(cost);
-        event.setMinAge(minAge);
-        eventRepository.saveAndFlush(event);
+                            @RequestParam("minAge") int minAge,
+                            @RequestParam("place") Place place) {
+        eventService.editEvent(event, name, time, cost, minAge, place);
         return "redirect:/events/managing/my_events";
     }
 }
