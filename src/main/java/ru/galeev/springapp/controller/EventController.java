@@ -57,7 +57,7 @@ public class EventController {
                               Authentication auth) {
 
         eventService.subUserOnEvent((User) auth.getPrincipal(), event);
-        return "redirect:/events/" + String.valueOf(event.getId());
+        return "redirect:/events/" + event.getId();
     }
 
     @PostMapping("/{id}/unFollow")
@@ -65,7 +65,7 @@ public class EventController {
                               Authentication auth) {
 
         eventService.unSubUserOnEvent((User) auth.getPrincipal(), event);
-        return "redirect:/events/" + String.valueOf(event.getId());
+        return "redirect:/events/" + event.getId();
     }
 
 }

@@ -52,6 +52,11 @@ public class Place {
 
     @Getter
     @Setter
+    @Column(name = "evaluators")
+    private int evaluators;
+
+    @Getter
+    @Setter
     @ManyToOne
     @JoinColumn (name="owner")
     private User owner;

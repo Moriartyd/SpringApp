@@ -12,6 +12,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User saveAndFlush(User user);
     User findUserById(long id);
     User findByActivationCode(String code);
+    List<User> findAllByActiveTrue();
+    List<User> findAllByRoleEquals(String role);
 
     User findUserByEventList(Event event);
 }

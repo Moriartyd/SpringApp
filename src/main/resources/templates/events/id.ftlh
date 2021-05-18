@@ -1,4 +1,5 @@
 <#import "../parts/common.ftlh" as c>
+<#import "../parts/rating.ftlh" as rating>
 <#include "../parts/security.ftlh">
 <@c.page "Мероприятие ${event.name}">
     <#if canEdit == true && isManager>
@@ -103,6 +104,8 @@
                 </div>
             </li>
         </ol>
+        <br/>
+        <@rating.get/>
         <br/>
         <#if isSub>
             <form method="post" action="/events/${event.id}/unFollow">

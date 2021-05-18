@@ -35,12 +35,11 @@ public class UserController {
     public String getOneUser(@PathVariable("id") User user,
                              Model model,
                              Authentication auth) {
-        User usr = (User) auth.getPrincipal();
         model.addAttribute("user", user);
         model.addAttribute("event_cnt", user.getUserRegisteredEvents().size());
         model.addAttribute("followers_cnt", user.getFollowers().size());
         model.addAttribute("subscriptions_cnt", user.getSubscriptions().size());
-        model.addAttribute("isSubscription", user.getFollowers().contains(usr));
+        model.addAttribute("isSubscription", user.getFollowers().contains((User) auth.getPrincipal()));
         if (Role.valueOf(user.getRole()) == Role.MANAGER) {
             model.addAttribute("managed_events_cnt", user.getEventList().size());
         }
@@ -83,17 +82,34 @@ public class UserController {
         return "events/cards";
     }
 
+    @GetMapping("/{id}/edit")
+    public String showEditPage(@PathVariable("id") User user, Model model) {
+        model.addAttribute("user", user);
+        return "user/edit";
+    }
+
     @PostMapping("/{id}/follow")
     public String addFollower(@PathVariable("id") User obj,
                               Authentication auth) {
         userService.followUser(obj, (User) auth.getPrincipal());
-        return "redirect:/user/" + String.valueOf(obj.getId());
+        return "redirect:/user/" + obj.getId();
     }
 
     @PostMapping("/{id}/unFollow")
     public String removeFollower(@PathVariable("id") User obj,
                               Authentication auth) {
         userService.unFollowUser(obj, (User) auth.getPrincipal());
-        return "redirect:/user/" + String.valueOf(obj.getId());
+        return "redirect:/user/" + obj.getId();
+    }
+
+    @PostMapping("/{id}/edit")
+    public String editYourself(@PathVariable("id") User user,
+                               @RequestParam String name,
+                               @RequestParam String surname,
+                               @RequestParam int age,
+                               @RequestParam String password,
+                               @RequestParam String email) {
+        userService.editUser(user, name, surname, age, password, email);
+        return "redirect:/user/" + user.getId();
     }
 }

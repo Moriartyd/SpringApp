@@ -1,11 +1,13 @@
 package ru.galeev.springapp.persistence.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import ru.galeev.springapp.enums.Role;
+import ru.galeev.springapp.utils.Hidden;
 
 import javax.persistence.*;
 
@@ -46,6 +48,7 @@ public class User implements UserDetails {
     private String email;
 
     @Getter
+    @Hidden
     @ManyToMany
     @JoinTable(
             name = "relation_events_users",
@@ -55,11 +58,8 @@ public class User implements UserDetails {
     private List<Event> userRegisteredEvents;
 
     @Getter
-    @ManyToMany(cascade = {
-            CascadeType.DETACH,
-            CascadeType.MERGE,
-            CascadeType.REFRESH,
-            CascadeType.PERSIST })
+    @Hidden
+    @ManyToMany
     @JoinTable(
             name = "relation_events_artists",
             joinColumns = { @JoinColumn(name = "artist") },
@@ -68,6 +68,7 @@ public class User implements UserDetails {
     private List<Event> artistRegisteredEvents;
 
     @Getter
+    @Hidden
     @ManyToMany
     @JoinTable(
             name = "user_followers",
@@ -77,6 +78,7 @@ public class User implements UserDetails {
     private List<User> followers;
 
     @Getter
+    @Hidden
     @ManyToMany
     @JoinTable(
             name = "user_followers",
@@ -114,6 +116,7 @@ public class User implements UserDetails {
 
     @Getter
     @Setter
+    @Hidden
     @OneToMany(mappedBy = "owner")
     private List<Place> placeList = new ArrayList<Place>();
 

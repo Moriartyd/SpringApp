@@ -11,6 +11,7 @@ import java.util.List;
 public interface EventRepository extends JpaRepository<Event, Long> {
     Event saveAndFlush(Event event);
     List<Event> findEventsByEventManager(User eventManager);
-
     List<Event> findEventsByPlace(Place place);
+
+    List<Event> findAllByActiveTrue();
 }

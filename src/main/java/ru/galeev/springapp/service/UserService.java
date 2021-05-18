@@ -20,8 +20,10 @@ public class UserService implements UserDetailsService {
     UserRepository userRepository;
     @Autowired
     MailService mailService;
+    @Autowired
+    MatrixService matrixService;
 
-    private final String link = "http://192.168.1.70:8090";
+    private final static String link = "http://192.168.1.70:8090";
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
@@ -33,19 +35,21 @@ public class UserService implements UserDetailsService {
         if (userFromDb != null) {
             return false;
         }
-        user.setRole(Role.USER.getAuthority());
-        user.setActivationCode(UUID.randomUUID().toString());
-        String message = String.format("Здравствуйте, %s %s!\n" +
-                "Добро пожаловать в EventTracker\n" +
-                "Посетите пожалуйста эту ссылку для активации:\n" +
-                "%s/activate/%s",
-                    user.getName(),
-                    user.getSurname(),
-                    link,
-                    user.getActivationCode()
-                    );
-        mailService.send(user.getEmail(), "Код активации", message);
-        user.setActive(false);
+//        user.setRole(Role.USER.getAuthority());
+//        user.setActivationCode(UUID.randomUUID().toString());
+//        String message = String.format("Здравствуйте, %s %s!\n" +
+//                "Добро пожаловать в EventTracker\n" +
+//                "Посетите пожалуйста эту ссылку для активации:\n" +
+//                "%s/activate/%s",
+//                    user.getName(),
+//                    user.getSurname(),
+//                    link,
+//                    user.getActivationCode()
+//                    );
+//        mailService.send(user.getEmail(), "Код активации", message);
+//        user.setActive(false);
+        matrixService.addUserToMatrix(user);
+        user.setActive(true);
         userRepository.saveAndFlush(user);
         return true;
     }
@@ -98,6 +102,30 @@ public class UserService implements UserDetailsService {
             if (roles.contains(key)) {
                 user.setRole(Role.valueOf(key).getAuthority());
             }
+        }
+        userRepository.saveAndFlush(user);
+    }
+
+    public void editUser(User user,
+                         String name,
+                         String surname,
+                         int age,
+                         String password,
+                         String email) {
+        if (!name.isEmpty()) {
+            user.setName(name);
+        }
+        if (!surname.isEmpty()) {
+            user.setSurname(surname);
+        }
+        if (age > user.getAge()) {
+            user.setAge(age);
+        }
+        if (!password.isEmpty()) {
+            user.setPassword(password);
+        }
+        if (!email.isEmpty()) {
+            user.setEmail(email);
         }
         userRepository.saveAndFlush(user);
     }

@@ -8,7 +8,7 @@
                         <i>${place.id}</i>
                     </div>
                     <div class="col">
-                        <a href="/place/managing/${place.id}">${place.name}</a>
+                        <a href="/place/managing/${place.id}">${place.name!'без имени'}</a>
                     </div>
                     <div class="col">
                         <form method="post" action="/place/managing/${place.id}/delete">

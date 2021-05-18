@@ -57,7 +57,7 @@
             </div>
         </div>
     <#if user.id == user_id>
-        <a href="#" class="btn btn-primary">Редактировать</a>
+        <a href="/user/${user.id}/edit" class="btn btn-primary">Редактировать</a>
     <#else>
         <#if isSubscription>
             <form method="post" action="/user/${user.id}/unFollow">

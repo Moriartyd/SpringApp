@@ -19,15 +19,18 @@ public class EventService {
     EventRepository eventRepository;
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    MatrixService matrixService;
 
     private static final int ACTIVE = 1;
     private static final int INACTIVE = 0;
     private static final int RATING = 5;
 
     public void createEvent(Event event, User user) {
-        event.setActive(ACTIVE);
+        event.setActive(true);
         event.getEventManager().add(user);
         event.setRating(RATING);
+        matrixService.addEventToMatrix(event);
         eventRepository.saveAndFlush(event);
     }
 

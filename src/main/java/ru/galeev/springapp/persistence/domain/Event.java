@@ -61,7 +61,11 @@ public class Event {
             inverseJoinColumns = { @JoinColumn(name = "manager") })
     private List<User> eventManager = new ArrayList<User>(); // Организатор мероприятия
 
-    @ManyToMany(mappedBy = "artistRegisteredEvents")
+    @ManyToMany
+    @JoinTable(
+            name = "relation_events_artists",
+            joinColumns = { @JoinColumn(name = "event") },
+            inverseJoinColumns = { @JoinColumn(name = "artist") })
     private List<User> artistList = new ArrayList<User>();; // Приглашенные звезды
 
     @Getter
@@ -76,7 +80,12 @@ public class Event {
     @Getter
     @Setter
     @Column(name = "rating")
-    private double rating; // Рейтинг
+    private int rating; // Рейтинг
+
+    @Getter
+    @Setter
+    @Column(name = "evaluators")
+    private int evaluators; //счетчик оценивавших
 
     @Getter
     @Setter
@@ -101,7 +110,7 @@ public class Event {
     @Getter
     @Setter
     @Column(name = "active")
-    private int active;
+    private boolean active;
 
     @Override
     public boolean equals(Object obj) {
