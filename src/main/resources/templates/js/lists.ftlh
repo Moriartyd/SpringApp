@@ -1,6 +1,7 @@
-<#macro addJs>
+<#macro users>
     <script>
-        async function main() {
+        async function main(){
+
             var users;
             await fetch("json/users")
                 .then((response) => {
@@ -12,80 +13,19 @@
                 .catch((err) => {
                     console.log(err);
                 });
+            var body = document.getElementById("maindiv");
 
-            var events;
-            await fetch("/json/events")
-                .then((response) => {
-                    return response.json();
-                })
-                .then((data) => {
-                    events = data;
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
-
-            var places;
-            await fetch("/json/places")
-                .then((response) => {
-                    return response.json();
-                })
-                .then((data) => {
-                    places = data;
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
-
-            fillColums(users, events, places);
-
-            document.getElementById('search').onkeyup = function() {
-                var usercol = document.getElementById("usercol");
-                var eventcol = document.getElementById("eventcol");
-                var placecol = document.getElementById("placecol");
-                usercol.innerHTML = 'Пользователи';
-                eventcol.innerHTML = 'События';
-                placecol.innerHTML = 'Места';
-                let searchText = this.value.toLowerCase();
-                for (var i = 0; i < users.length && i < 10; i++) {
-                    if (users[i].name.toLowerCase().search(searchText) !== -1 ||
-                        users[i].surname.toLowerCase().search(searchText) !== -1 ||
-                        users[i].login.toLowerCase().search(searchText) !== -1) {
-                        usercol.appendChild(newRow().appendChild(userCard(users[i])));
+            for (var i = 0; i < users.length / 3 && i < 10; i++) {
+                var row = newRow();
+                for (var j = 0; j < 3; j++) {
+                    if (users[i * 3 + j]) {
+                        var col = document.createElement("div");
+                        col.className = "col";
+                        col.appendChild(userCard(users[i * 3 + j]))
+                        row.appendChild(col);
                     }
                 }
-                for (var i = 0; i < events.length && i < 10; i++) {
-                    if (events[i].name.toLowerCase().search(searchText) !== -1) {
-                        eventcol.appendChild(newRow().appendChild(eventCard(events[i])));
-                    }
-                }
-                for (var i = 0; i < places.length && i < 10; i++) {
-                    if (places[i].id !== 61) {
-                        if (places[i].name.toLowerCase().search(searchText) !== -1 ||
-                            places[i].owner.login.toLowerCase().search(searchText) !== -1 ) {
-                                placecol.appendChild(newRow().appendChild(placecard(places[i])));
-                        }
-                    }
-                }
-            }
-            // fillColumsWithSearch(users, events, places, text);
-
-
-            function fillColums(users, events, places) {
-                var usercol = document.getElementById("usercol");
-                var eventcol = document.getElementById("eventcol");
-                var placecol = document.getElementById("placecol");
-
-                for (var i = 0; i < users.length && i < 10; i++) {
-                    usercol.appendChild(newRow().appendChild(userCard(users[i])));
-                }
-                for (var i = 0; i < events.length && i < 10; i++) {
-                    eventcol.appendChild(newRow().appendChild(eventCard(events[i])));
-                }
-                for (var i = 0; i < places.length && i < 10; i++) {
-                    if (places[i].id !== 61)
-                        placecol.appendChild(newRow().appendChild(placecard(places[i])));
-                }
+                body.appendChild(row);
             }
 
             function newRow(){
@@ -122,6 +62,52 @@
                 cardbody.appendChild(a);
                 card.appendChild(cardbody);
                 return card;
+            }
+        }
+        main();
+    </script>
+</#macro>
+
+<#macro events>
+    <script>
+        async function main() {
+
+            var events;
+            await fetch("/json/events")
+                .then((response) => {
+                    return response.json();
+                })
+                .then((data) => {
+                    events = data;
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+
+            var body = document.getElementById("maindiv");
+
+            for (var i = 0; i < events.length / 3 && i < 10; i++) {
+                var row = newRow();
+                for (var j = 0; j < 3; j++) {
+                    if (events[i * 3 + j]) {
+                        var col = newCol();
+                        col.appendChild(eventCard(events[i * 3 + j]))
+                        row.appendChild(col);
+                    }
+                }
+                body.appendChild(row);
+            }
+
+            function newCol(){
+                var col = document.createElement("div");
+                col.setAttribute("class", "col");
+                return col;
+            }
+
+            function newRow(){
+                var row = document.createElement("div");
+                row.setAttribute("class", "row");
+                return row;
             }
 
             function eventCard(event) {
@@ -172,6 +158,52 @@
                 cardbody.appendChild(a);
                 card.appendChild(cardbody);
                 return card;
+            }
+        }
+        main();
+    </script>
+</#macro>
+
+<#macro places>
+    <script>
+        async function main(){
+
+            var places;
+            await fetch("/json/places")
+                .then((response) => {
+                    return response.json();
+                })
+                .then((data) => {
+                    places = data;
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+
+            var body = document.getElementById("maindiv");
+
+            for (var i = 0; i < places.length / 3 && i < 10; i++) {
+                var row = newRow();
+                for (var j = 0; j < 3; j++) {
+                    if (places[i * 3 + j]) {
+                        var col = newCol();
+                        col.appendChild(placecard(places[i * 3 + j]))
+                        row.appendChild(col);
+                    }
+                }
+                body.appendChild(row);
+            }
+
+            function newCol(){
+                var col = document.createElement("div");
+                col.setAttribute("class", "col");
+                return col;
+            }
+
+            function newRow(){
+                var row = document.createElement("div");
+                row.setAttribute("class", "row");
+                return row;
             }
 
             function placecard(place) {

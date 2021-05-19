@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.transaction.annotation.Propagation;
+import ru.galeev.springapp.utils.Hidden;
 
 import javax.persistence.*;
 import javax.transaction.Transactional;
@@ -34,11 +35,8 @@ public class Event {
 
     @Getter
     @Setter
-    @ManyToOne(cascade = {
-            CascadeType.DETACH,
-            CascadeType.MERGE,
-            CascadeType.REFRESH,
-            CascadeType.PERSIST })
+    @ManyToOne
+    @Hidden
     @JoinColumn(name = "place_id")
     private Place place; // Место проведения
 
@@ -55,6 +53,7 @@ public class Event {
     @Getter
     @Setter
     @ManyToMany
+    @Hidden
     @JoinTable(
             name = "relation_events_event_managers",
             joinColumns = { @JoinColumn(name = "event") },
@@ -62,6 +61,7 @@ public class Event {
     private List<User> eventManager = new ArrayList<User>(); // Организатор мероприятия
 
     @ManyToMany
+    @Hidden
     @JoinTable(
             name = "relation_events_artists",
             joinColumns = { @JoinColumn(name = "event") },
@@ -70,6 +70,7 @@ public class Event {
 
     @Getter
     @ManyToMany
+    @Hidden
     @JoinTable(
             name = "relation_events_users",
             joinColumns = { @JoinColumn(name = "event_id") },

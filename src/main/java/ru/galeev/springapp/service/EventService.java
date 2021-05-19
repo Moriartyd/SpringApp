@@ -30,8 +30,9 @@ public class EventService {
         event.setActive(true);
         event.getEventManager().add(user);
         event.setRating(RATING);
-        matrixService.addEventToMatrix(event);
         eventRepository.saveAndFlush(event);
+        matrixService.addEventToMatrix(event);
+
     }
 
     public boolean checkRegistrationOnEvent(Event event, User user) {

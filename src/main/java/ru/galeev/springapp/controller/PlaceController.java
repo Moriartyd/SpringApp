@@ -19,6 +19,12 @@ public class PlaceController {
     @Autowired
     EventRepository eventRepository;
 
+    @GetMapping
+    public String main(Model model) {
+        model.addAttribute("title", "Места");
+        return "common";
+    }
+
     @GetMapping("/{id}")
     public String getPlaceInfo(@PathVariable("id")Place place, Model model) {
         model.addAttribute("place", place);

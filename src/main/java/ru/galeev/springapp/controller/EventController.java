@@ -23,6 +23,12 @@ public class EventController {
     @Autowired
     EventService eventService;
 
+    @GetMapping
+    public String main(Model model) {
+        model.addAttribute("title", "Мероприятия");
+        return "common";
+    }
+
     @GetMapping("/{id}")
     public String getEventInfo(@PathVariable("id")Event event,
                                Authentication auth,

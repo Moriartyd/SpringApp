@@ -17,6 +17,12 @@ public class UserController {
     @Autowired
     UserService userService;
 
+    @GetMapping
+    public String main(Model model) {
+        model.addAttribute("title", "Пользователи");
+        return "common";
+    }
+
     @GetMapping("/registration")
     public String registration() {
         return "user/registration";
