@@ -13,7 +13,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User findUserById(long id);
     User findByActivationCode(String code);
     List<User> findAllByActiveTrue();
-    List<User> findAllByRoleEquals(String role);
+    List<User> findAllByRoleEqualsAndActiveIsTrue(String role);
 
     User findUserByEventList(Event event);
 }

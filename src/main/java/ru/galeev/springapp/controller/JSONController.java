@@ -42,7 +42,7 @@ public class JSONController {
     @ResponseBody
     @GetMapping("/users")
     public String getUsers() {
-        List<User> userList = userRepository.findAllByRoleEquals(Role.USER.getAuthority());
+        List<User> userList = userRepository.findAllByRoleEqualsAndActiveIsTrue(Role.USER.getAuthority());
 
         return gson.toJson(userList);
     }

@@ -48,9 +48,10 @@ public class UserService implements UserDetailsService {
 //                    );
 //        mailService.send(user.getEmail(), "Код активации", message);
 //        user.setActive(false);
-        matrixService.addUserToMatrix(user);
         user.setActive(true);
+        user.setRole(Role.USER.getAuthority());
         userRepository.saveAndFlush(user);
+        matrixService.addUserToMatrix(user);
         return true;
     }
 

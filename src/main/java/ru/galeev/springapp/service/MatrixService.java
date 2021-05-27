@@ -36,4 +36,8 @@ public class MatrixService {
             matrixRepository.save(m);
         }
     }
+
+//    public List<Matrix> getU(Event a, Event b) {
+//
+//    }
 }

@@ -1,7 +1,11 @@
 <#include "security.ftlh">
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container-fluid">
-        <a class="navbar-brand" href="/main">Главная</a>
+        <#if known>
+            <a class="navbar-brand" href="/main">Главная</a>
+        <#else>
+            <a class="navbar-brand" href="#">Главная</a>
+        </#if>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -11,6 +15,7 @@
 <#--                <li class="nav-item">-->
 <#--                    <a class="nav-link" aria-current="page" href="/main">Главная</a>-->
 <#--                </li>-->
+                <#if known>
                 <li class="nav-item">
                     <a class="nav-link" aria-current="page" href="/user/${user_id}">Профиль</a>
                 </li>
@@ -23,6 +28,7 @@
                 <li class="nav-item">
                     <a class="nav-link" aria-current="page" href="/place">Места</a>
                 </li>
+                </#if>
                 <#if isAdmin>
                 <li class="nav-item">
                     <a class="nav-link" aria-current="page" href="/admin">Администрирование</a>
