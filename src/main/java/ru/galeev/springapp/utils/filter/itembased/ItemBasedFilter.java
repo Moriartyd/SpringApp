@@ -1,6 +1,7 @@
 package ru.galeev.springapp.utils.filter.itembased;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import ru.galeev.springapp.persistence.domain.Event;
 import ru.galeev.springapp.persistence.domain.MatrixPK;
 import ru.galeev.springapp.persistence.domain.User;
@@ -10,6 +11,7 @@ import ru.galeev.springapp.persistence.repository.MatrixRepository;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Service
 public class ItemBasedFilter {
 
     @Autowired

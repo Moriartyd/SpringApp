@@ -105,7 +105,15 @@
             </li>
         </ol>
         <br/>
-        <@rating.get/>
+        <#if rated == 0>
+        <form method="post" action="/events/${event.id}/set_rating" id="form-id">
+            <@rating.get/>
+            <input type="hidden" name="_csrf" value="${_csrf.token}">
+            <input type="submit" hidden="true" id="click">
+        </form>
+        <#else>
+            <@rating.show/>
+        </#if>
         <br/>
         <#if isSub>
             <form method="post" action="/events/${event.id}/unFollow">

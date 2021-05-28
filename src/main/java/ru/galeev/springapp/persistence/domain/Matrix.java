@@ -14,6 +14,11 @@ public class Matrix {
     @EmbeddedId
     MatrixPK matrixPK;
 
+    private double score;
+
+    @Column(name = "filtered_score")
+    private double filteredScore;
+
     public double getScore() {
         return score;
     }
@@ -22,7 +27,6 @@ public class Matrix {
         this.score = score;
     }
 
-    private double score;
 
     public Matrix(MatrixPK pk) {
         this.matrixPK = pk;

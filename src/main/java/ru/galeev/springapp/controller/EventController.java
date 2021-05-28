@@ -9,6 +9,8 @@ import ru.galeev.springapp.persistence.domain.Event;
 import ru.galeev.springapp.persistence.domain.User;
 import ru.galeev.springapp.service.EventService;
 
+import java.util.Map;
+
 @Controller
 @RequestMapping("/events")
 public class EventController {
@@ -29,6 +31,7 @@ public class EventController {
         model.addAttribute("event", event);
         model.addAttribute("isSub", eventService.checkRegistrationOnEvent(event, (User) auth.getPrincipal()));
         model.addAttribute("friends", eventService.getUserSubsOnEvent((User) auth.getPrincipal(), event).size());
+        model.addAttribute("rated", eventService.isRatedByUser(event, (User) auth.getPrincipal()));
         model.addAttribute("canEdit", false);
         return "events/id";
     }
@@ -64,6 +67,14 @@ public class EventController {
                               Authentication auth) {
 
         eventService.unSubUserOnEvent((User) auth.getPrincipal(), event);
+        return "redirect:/events/" + event.getId();
+    }
+
+    @PostMapping("/{id}/set_rating")
+    public String setRating(@PathVariable("id")Event event,
+                            @RequestParam Map<String, String> form,
+                            Authentication auth) {
+        eventService.setRating(event, (User) auth.getPrincipal(), Integer.parseInt(form.get("rating")));
         return "redirect:/events/" + event.getId();
     }
 

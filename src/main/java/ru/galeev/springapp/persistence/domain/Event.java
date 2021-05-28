@@ -52,6 +52,11 @@ public class Event {
 
     @Getter
     @Setter
+    @Column(name = "keywords")
+    private String keywords;
+
+    @Getter
+    @Setter
     @ManyToMany
     @Hidden
     @JoinTable(

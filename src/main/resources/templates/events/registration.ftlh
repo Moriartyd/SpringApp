@@ -42,6 +42,14 @@
         <div class="col-auto">
             <input type="number" id="minAge" name="minAge" class="form-control"/>
         </div>
+        <div class="col-auto">
+            <label for="keywords" class="col-form-label"> Ключевые слова : </label>
+        </div>
+        <div class="col-auto">
+            <textarea id="keywords" name="keywords" rows="3" class="form-control"
+            placeholder="Данное поле необходимо для более частых показов вашего мероприятия.
+            Пример: семейное, костюмированное, еда, кино"></textarea>
+        </div>
         <br/>
         <input type="submit" id="but" value="Создать" class="btn btn-primary"/>
         <input type="hidden" name="_csrf" value="${_csrf.token}">
