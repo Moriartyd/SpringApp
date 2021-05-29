@@ -7,12 +7,15 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ru.galeev.springapp.enums.EventType;
 import ru.galeev.springapp.persistence.domain.Event;
 import ru.galeev.springapp.persistence.domain.Place;
 import ru.galeev.springapp.persistence.domain.User;
 import ru.galeev.springapp.service.EventService;
 import ru.galeev.springapp.service.PlaceService;
 import ru.galeev.springapp.utils.DateFormatter;
+
+import java.util.Map;
 
 @Controller
 @RequestMapping("/events/managing")
@@ -27,13 +30,15 @@ public class EventManagerController {
     @GetMapping("/registration")
     public String getRegistrationForm(Model model) {
         model.addAttribute("places", placeService.getAllPlaces());
+        model.addAttribute("types", EventType.values());
         return "events/registration";
     }
 
     @PostMapping("/registration")
     public String createEvent(Event event,
+                              @RequestParam Map<String, String> form,
                               Authentication auth) {
-        eventService.createEvent(event, (User) auth.getPrincipal());
+        eventService.createEvent(event, (User) auth.getPrincipal(), form);
         return "redirect:/events/managing/my_events";
     }
 

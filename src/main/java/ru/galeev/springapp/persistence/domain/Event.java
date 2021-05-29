@@ -4,14 +4,12 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.transaction.annotation.Propagation;
+import ru.galeev.springapp.enums.EventType;
 import ru.galeev.springapp.utils.Hidden;
 
 import javax.persistence.*;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "events")
@@ -52,8 +50,10 @@ public class Event {
 
     @Getter
     @Setter
-    @Column(name = "keywords")
-    private String keywords;
+    @ElementCollection(targetClass = EventType.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "event_types", joinColumns = @JoinColumn(name = "event_id"))
+    @Enumerated(EnumType.STRING)
+    private Set<EventType> keywords = new HashSet<EventType>();
 
     @Getter
     @Setter

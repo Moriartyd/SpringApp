@@ -39,7 +39,7 @@ public class ItemBasedFilter {
                         LinkedHashMap::new));
     }
 
-    public double getRecommendedScore(User u, Event e) {
+    private double getRecommendedScore(User u, Event e) {
         Iterator<Map.Entry<Event, Double>> iterator = getSortedMap(e).entrySet().iterator();
 
         double chis = 0;
@@ -53,7 +53,7 @@ public class ItemBasedFilter {
         return chis / znam;
     }
 
-    public Map<Event, Double> getSortedMap(Event e) {
+    private Map<Event, Double> getSortedMap(Event e) {
         List<Event> eventList = eventRepository.findAll();
         eventList.remove(e);
 
@@ -73,7 +73,7 @@ public class ItemBasedFilter {
                         LinkedHashMap::new));
     }
 
-    public double getSim(Event a, Event m) {
+    private double getSim(Event a, Event m) {
         List<User> users = matrixRepository.getU(a, m);
         double ra = (double) a.getRating() / a.getEvaluators();
         double rm = (double) m.getRating() / m.getEvaluators();

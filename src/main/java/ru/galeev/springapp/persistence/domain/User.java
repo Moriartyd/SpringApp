@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import ru.galeev.springapp.enums.EventType;
 import ru.galeev.springapp.enums.Role;
 import ru.galeev.springapp.utils.Hidden;
 
@@ -46,6 +47,13 @@ public class User implements UserDetails {
     @Setter
     @Column(name = "email")
     private String email;
+
+    @Getter
+    @Setter
+    @ElementCollection(targetClass = EventType.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_keywords", joinColumns = @JoinColumn(name = "user_id"))
+    @Enumerated(EnumType.STRING)
+    private Set<EventType> keywords = new HashSet<EventType>();
 
     @Getter
     @Hidden

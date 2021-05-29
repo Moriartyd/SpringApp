@@ -5,10 +5,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ru.galeev.springapp.enums.EventType;
 import ru.galeev.springapp.enums.Role;
 import ru.galeev.springapp.service.UserService;
 import ru.galeev.springapp.persistence.domain.User;
 import ru.galeev.springapp.persistence.repository.UserRepository;
+
+import java.util.Map;
 
 @Controller
 @RequestMapping("/user")
@@ -24,13 +27,16 @@ public class UserController {
     }
 
     @GetMapping("/registration")
-    public String registration() {
+    public String registration(Model model) {
+        model.addAttribute("types", EventType.values());
         return "user/registration";
     }
 
     @PostMapping("/registration")
-    public String createUser(User user, Model model) {
-        if (!userService.createUser(user)) {
+    public String createUser(User user,
+                             @RequestParam Map<String, String> form,
+                             Model model) {
+        if (!userService.createUser(user, form)) {
             model.addAttribute("message", "Пользователь уже существует");
             return "user/registration";
         }

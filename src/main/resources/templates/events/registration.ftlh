@@ -46,12 +46,30 @@
             <label for="keywords" class="col-form-label"> Ключевые слова : </label>
         </div>
         <div class="col-auto">
-            <textarea id="keywords" name="keywords" rows="3" class="form-control"
-            placeholder="Данное поле необходимо для более частых показов вашего мероприятия.
-            Пример: семейное, костюмированное, еда, кино"></textarea>
+            <#list types as type>
+                <input type="checkbox" class="btn-check" id="${type}" name="${type.name()}" autocomplete="off">
+                <label class="btn btn-outline-primary" for="${type}">${type.toString()}</label>
+            </#list>
         </div>
         <br/>
         <input type="submit" id="but" value="Создать" class="btn btn-primary"/>
         <input type="hidden" name="_csrf" value="${_csrf.token}">
     </form>
+    <script>
+        let boxes = document.getElementsByClassName("btn-check");
+        for (let i = 0; i < boxes.length; i++)
+            boxes[i].onchange = handler;
+        function handler(e) {
+            let qnt = 0;
+            for (let i = 0; i < boxes.length; i++) {
+                if (boxes[i].checked) {
+                    qnt++;
+                }
+            }
+            if (qnt > 3) {
+                alert("Выберите не больше трех вариантов");
+                this.checked = false;
+            }
+        }
+    </script>
 </@c.page>

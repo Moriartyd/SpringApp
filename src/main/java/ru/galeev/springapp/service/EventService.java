@@ -5,14 +5,17 @@ import com.google.gson.reflect.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import ru.galeev.springapp.enums.EventType;
 import ru.galeev.springapp.persistence.domain.*;
 import ru.galeev.springapp.persistence.repository.EventRepository;
 import ru.galeev.springapp.persistence.repository.UserRepository;
 import ru.galeev.springapp.utils.DateFormatter;
 
 import java.lang.reflect.Type;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,7 +35,15 @@ public class EventService {
     private static final int INACTIVE = 0;
     private static final int RATING = 5;
 
-    public void createEvent(Event event, User user) {
+    public void createEvent(Event event, User user, Map<String, String> form) {
+        Set<String> types = Arrays.stream(EventType.values())
+                .map(EventType::name)
+                .collect(Collectors.toSet());
+        for (String key : form.keySet()) {
+            if (types.contains(key)) {
+                event.getKeywords().add(EventType.valueOf(key));
+            }
+        }
         event.setActive(true);
         event.getEventManager().add(user);
         event.setRating(RATING);

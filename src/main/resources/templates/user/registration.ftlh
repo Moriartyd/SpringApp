@@ -36,10 +36,16 @@
         <div class="col-auto">
             <label for="password" class="col-form-label"> Пароль : </label>
         </div>
-        <div class="col-auto">
+        <div class="col-auto mb-3">
             <input type="password" id="password" name="password" class="form-control"/>
         </div>
+        <#list types as type>
+            <input type="checkbox" class="btn-check" id="${type}" name="${type.name()}" autocomplete="off">
+            <label class="btn btn-outline-primary" for="${type}">${type.toString()}</label>
+        </#list>
     </div>
+
+    <br/>
     <input type="submit" id="but" value="Зарегистрироваться" class="btn btn-primary"/>
     <input type="hidden" name="_csrf" value="${_csrf.token}">
 </form>
@@ -49,6 +55,22 @@
             alert('Подтвердите почту')
         }
             button.addEventListener('click', handleClick)
+
+        let boxes = document.getElementsByClassName("btn-check");
+        for (let i = 0; i < boxes.length; i++)
+            boxes[i].onchange = handler;
+        function handler(e) {
+            let qnt = 0;
+            for (let i = 0; i < boxes.length; i++) {
+                if (boxes[i].checked) {
+                    qnt++;
+                }
+            }
+            if (qnt > 3) {
+                alert("Выберите не больше трех вариантов");
+                this.checked = false;
+            }
+        }
     </script>
 <#if message??><h1>${message}</h1></#if>
 </@c.page>

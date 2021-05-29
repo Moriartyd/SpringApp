@@ -5,6 +5,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import ru.galeev.springapp.enums.EventType;
 import ru.galeev.springapp.enums.Role;
 import ru.galeev.springapp.persistence.domain.Event;
 import ru.galeev.springapp.persistence.domain.User;
@@ -30,7 +31,7 @@ public class UserService implements UserDetailsService {
         return userRepository.findUserByLogin(s);
     }
 
-    public boolean createUser(User user) {
+    public boolean createUser(User user, Map<String, String> form) {
         User userFromDb = userRepository.findUserByLogin(user.getLogin());
         if (userFromDb != null) {
             return false;
@@ -48,8 +49,17 @@ public class UserService implements UserDetailsService {
 //                    );
 //        mailService.send(user.getEmail(), "Код активации", message);
 //        user.setActive(false);
+        Set<String> types = Arrays.stream(EventType.values())
+                .map(EventType::name)
+                .collect(Collectors.toSet());
+        for (String key : form.keySet()) {
+            if (types.contains(key)) {
+                user.getKeywords().add(EventType.valueOf(key));
+            }
+        }
         user.setActive(true);
         user.setRole(Role.USER.getAuthority());
+
         userRepository.saveAndFlush(user);
         matrixService.addUserToMatrix(user);
         return true;
@@ -91,7 +101,9 @@ public class UserService implements UserDetailsService {
     }
 
     public void deleteUser(User user) {
-        userRepository.delete(user);
+//        userRepository.delete(user);
+        user.setActive(false);
+        userRepository.saveAndFlush(user);
     }
 
     public void editUser(User user, String login, Map<String, String> form) {
