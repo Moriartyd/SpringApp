@@ -19,6 +19,14 @@ public class Matrix {
     @Column(name = "filtered_score")
     private double filteredScore;
 
+    public double getFilteredScore() {
+        return filteredScore;
+    }
+
+    public void setFilteredScore(double filteredScore) {
+        this.filteredScore = filteredScore;
+    }
+
     public double getScore() {
         return score;
     }

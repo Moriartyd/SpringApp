@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface MatrixRepository extends JpaRepository<Matrix, MatrixPK> {
     Matrix findByMatrixPK(MatrixPK matrixPK);
-    @Query(value = "select m from Matrix m where m.matrixPK.user.id = ?1")
+    @Query(value = "select m from Matrix m where m.matrixPK.user = ?1")
     List<Matrix> findByUser(User user);
     @Query(value = "select m.matrixPK.user from Matrix m " +
             "where exists " +

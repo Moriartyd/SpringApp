@@ -25,7 +25,10 @@ public class ContentBasedFilter {
 
         Map<Event, Double> map = new LinkedHashMap<>();
         for (Event e : eventList) {
-            map.put(e, getDice(userKeyWords, e.getKeywords()));
+            double dice = getDice(userKeyWords, e.getKeywords());
+            if (dice != 0) {
+                map.put(e, dice);
+            }
         }
         return map.entrySet().stream()
                 .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
@@ -36,7 +39,7 @@ public class ContentBasedFilter {
                         LinkedHashMap::new));
     }
 
-    public double getDice(Set<EventType> u, Set<EventType> e) {
+    private double getDice(Set<EventType> u, Set<EventType> e) {
         int union = 0;
 
         for (EventType t : u) {
@@ -44,6 +47,6 @@ public class ContentBasedFilter {
                 union++;
             }
         }
-        return Math.abs((double) union)/Math.abs(EventType.values().length);
+        return Math.abs(2 * (double) union)/Math.abs(EventType.values().length);
     }
 }

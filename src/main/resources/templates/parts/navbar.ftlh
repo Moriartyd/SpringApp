@@ -4,7 +4,7 @@
         <#if known>
             <a class="navbar-brand" href="/main">Главная</a>
         <#else>
-            <a class="navbar-brand" href="#">Главная</a>
+            <a class="navbar-brand" href="/">Главная</a>
         </#if>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>

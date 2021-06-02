@@ -25,6 +25,8 @@ public class MatrixService {
         List<Event> eventList = eventRepository.findAllByActiveTrue();
         for (Event e : eventList) {
             Matrix m = new Matrix(new MatrixPK(user, e));
+            m.setFilteredScore(0);
+            m.setScore(0);
             matrixRepository.save(m);
         }
     }
@@ -33,6 +35,8 @@ public class MatrixService {
         List<User> userList = userRepository.findAllByActiveTrue();
         for (User u : userList) {
             Matrix m = new Matrix(new MatrixPK(u, event));
+            m.setFilteredScore(0);
+            m.setScore(0);
             matrixRepository.save(m);
         }
     }

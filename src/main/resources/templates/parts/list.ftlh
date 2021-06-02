@@ -2,7 +2,7 @@
 
 <#macro list someList isUser isPlace isEvent>
     <#assign i = -1>
-    <#list someList as obj>
+    <#list someList as obj, d>
         <#assign i++>
         <#if i == 0>
             <div class="row">

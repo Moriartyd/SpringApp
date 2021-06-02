@@ -65,15 +65,15 @@ public class User implements UserDetails {
     )
     private List<Event> userRegisteredEvents;
 
-    @Getter
-    @Hidden
-    @ManyToMany
-    @JoinTable(
-            name = "relation_events_artists",
-            joinColumns = { @JoinColumn(name = "artist") },
-            inverseJoinColumns = { @JoinColumn(name = "event") }
-    )
-    private List<Event> artistRegisteredEvents;
+//    @Getter
+//    @Hidden
+//    @ManyToMany
+//    @JoinTable(
+//            name = "relation_events_artists",
+//            joinColumns = { @JoinColumn(name = "artist") },
+//            inverseJoinColumns = { @JoinColumn(name = "event") }
+//    )
+//    private List<Event> artistRegisteredEvents;
 
     @Getter
     @Hidden

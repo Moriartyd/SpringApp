@@ -45,11 +45,6 @@ public class Event {
 
     @Getter
     @Setter
-    @Column(name = "music")
-    private int music; // Жанр музыки
-
-    @Getter
-    @Setter
     @ElementCollection(targetClass = EventType.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "event_types", joinColumns = @JoinColumn(name = "event_id"))
     @Enumerated(EnumType.STRING)
@@ -65,13 +60,13 @@ public class Event {
             inverseJoinColumns = { @JoinColumn(name = "manager") })
     private List<User> eventManager = new ArrayList<User>(); // Организатор мероприятия
 
-    @ManyToMany
-    @Hidden
-    @JoinTable(
-            name = "relation_events_artists",
-            joinColumns = { @JoinColumn(name = "event") },
-            inverseJoinColumns = { @JoinColumn(name = "artist") })
-    private List<User> artistList = new ArrayList<User>();; // Приглашенные звезды
+//    @ManyToMany
+//    @Hidden
+//    @JoinTable(
+//            name = "relation_events_artists",
+//            joinColumns = { @JoinColumn(name = "event") },
+//            inverseJoinColumns = { @JoinColumn(name = "artist") })
+//    private List<User> artistList = new ArrayList<User>();; // Приглашенные звезды
 
     @Getter
     @ManyToMany

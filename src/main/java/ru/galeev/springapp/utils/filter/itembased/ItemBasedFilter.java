@@ -27,7 +27,10 @@ public class ItemBasedFilter {
         Map<Event, Double> map = new LinkedHashMap<>();
 
         for (Event e : eventList) {
-            map.put(e, getRecommendedScore(u, e));
+            Double score = getRecommendedScore(u, e);
+            if (!score.isNaN()) {
+                map.put(e, score);
+            }
         }
 
         return map.entrySet().stream()
@@ -39,7 +42,7 @@ public class ItemBasedFilter {
                         LinkedHashMap::new));
     }
 
-    private double getRecommendedScore(User u, Event e) {
+    private Double getRecommendedScore(User u, Event e) {
         Iterator<Map.Entry<Event, Double>> iterator = getSortedMap(e).entrySet().iterator();
 
         double chis = 0;
