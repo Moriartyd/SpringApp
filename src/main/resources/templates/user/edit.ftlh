@@ -39,8 +39,32 @@
             <div class="col-auto">
                 <input type="password" id="password" name="password" class="form-control"/>
             </div>
+            <br/>
+            <div class="col-auto">
+                <#list keywords as keyword>
+                    <input type="checkbox" class="btn-check" id="${keyword}" name="${keyword.name()}" autocomplete="off" ${user.keywords?seq_contains(keyword)?string("checked", "")}>
+                    <label class="btn btn-outline-primary" for="${keyword}">${keyword.toString()}</label>
+                </#list>
+            </div>
         </div>
         <input type="submit" id="but" value="Изменить" class="btn btn-primary"/>
         <input type="hidden" name="_csrf" value="${_csrf.token}">
     </form>
+    <script>
+        let boxes = document.getElementsByClassName("btn-check");
+        for (let i = 0; i < boxes.length; i++)
+            boxes[i].onchange = handler;
+        function handler(e) {
+            let qnt = 0;
+            for (let i = 0; i < boxes.length; i++) {
+                if (boxes[i].checked) {
+                    qnt++;
+                }
+            }
+            if (qnt > 3) {
+                alert("Выберите не больше трех вариантов");
+                this.checked = false;
+            }
+        }
+    </script>
 </@c.page>

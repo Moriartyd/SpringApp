@@ -5,6 +5,7 @@ import com.google.gson.reflect.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 import ru.galeev.springapp.enums.EventType;
 import ru.galeev.springapp.persistence.domain.*;
 import ru.galeev.springapp.persistence.repository.EventRepository;
@@ -94,12 +95,22 @@ public class EventService {
                           String time,
                           int cost,
                           int minAge,
-                          Place place) {
+                          Place place,
+                          Map<String, String> form) {
         event.setName(name);
         event.setPlace(place);
         event.setTime(DateFormatter.fromHtmlDate(time));
         event.setCost(cost);
         event.setMinAge(minAge);
+        event.getKeywords().clear();
+        Set<String> types = Arrays.stream(EventType.values())
+                .map(EventType::name)
+                .collect(Collectors.toSet());
+        for (String key : form.keySet()) {
+            if (types.contains(key)) {
+                event.getKeywords().add(EventType.valueOf(key));
+            }
+        }
         eventRepository.saveAndFlush(event);
     }
 

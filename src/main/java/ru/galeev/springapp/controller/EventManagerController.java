@@ -49,7 +49,7 @@ public class EventManagerController {
         return "events/eventList";
     }
 
-    @Transient
+//    @Transient
     @GetMapping("event/{id}")
     public String getOneEvent(@PathVariable("id") Event event,
                               Authentication auth,
@@ -58,6 +58,7 @@ public class EventManagerController {
         model.addAttribute("event", event);
         model.addAttribute("time", DateFormatter.getHtmlDate(event.getTime()));
         model.addAttribute("places", placeService.getAllPlaces());
+        model.addAttribute("keywords", EventType.values());
         return "events/id";
     }
 
@@ -73,8 +74,9 @@ public class EventManagerController {
                             @RequestParam("time") String time,
                             @RequestParam("cost") int cost,
                             @RequestParam("minAge") int minAge,
-                            @RequestParam("place") Place place) {
-        eventService.editEvent(event, name, time, cost, minAge, place);
+                            @RequestParam("place") Place place,
+                            @RequestParam Map<String, String> form) {
+        eventService.editEvent(event, name, time, cost, minAge, place, form);
         return "redirect:/events/managing/my_events";
     }
 }

@@ -1,8 +1,9 @@
 <#import "cards.ftlh" as card>
 
+<#--    TODO: ПЕРЕДЕЛАТЬ    -->
 <#macro list someList isUser isPlace isEvent>
     <#assign i = -1>
-    <#list someList as obj, d>
+    <#list someList as obj>
         <#assign i++>
         <#if i == 0>
             <div class="row">

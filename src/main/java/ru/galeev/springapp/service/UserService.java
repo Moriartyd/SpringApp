@@ -124,7 +124,8 @@ public class UserService implements UserDetailsService {
                          String surname,
                          int age,
                          String password,
-                         String email) {
+                         String email,
+                         Map<String, String> form) {
         if (!name.isEmpty()) {
             user.setName(name);
         }
@@ -139,6 +140,15 @@ public class UserService implements UserDetailsService {
         }
         if (!email.isEmpty()) {
             user.setEmail(email);
+        }
+        user.getKeywords().clear();
+        Set<String> types = Arrays.stream(EventType.values())
+                .map(EventType::name)
+                .collect(Collectors.toSet());
+        for (String key : form.keySet()) {
+            if (types.contains(key)) {
+                user.getKeywords().add(EventType.valueOf(key));
+            }
         }
         userRepository.saveAndFlush(user);
     }

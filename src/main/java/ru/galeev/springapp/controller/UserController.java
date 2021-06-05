@@ -97,6 +97,7 @@ public class UserController {
     @GetMapping("/{id}/edit")
     public String showEditPage(@PathVariable("id") User user, Model model) {
         model.addAttribute("user", user);
+        model.addAttribute("keywords", EventType.values());
         return "user/edit";
     }
 
@@ -120,8 +121,9 @@ public class UserController {
                                @RequestParam String surname,
                                @RequestParam int age,
                                @RequestParam String password,
-                               @RequestParam String email) {
-        userService.editUser(user, name, surname, age, password, email);
+                               @RequestParam String email,
+                               @RequestParam Map<String, String> form) {
+        userService.editUser(user, name, surname, age, password, email, form);
         return "redirect:/user/" + user.getId();
     }
 }

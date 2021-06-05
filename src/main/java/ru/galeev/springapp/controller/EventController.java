@@ -30,9 +30,9 @@ public class EventController {
     @GetMapping
     public String main(Model model,  Authentication auth) {
         model.addAttribute("title", "Мероприятия");
-        model.addAttribute("ibList", ibFilter.getRecommendedList((User) auth.getPrincipal()));
-        model.addAttribute("cbList", cbFilter.getRecommendedList((User) auth.getPrincipal()));
-        model.addAttribute("aList", rSystem.getRecommends((User) auth.getPrincipal()));
+        model.addAttribute("ibList", ibFilter.getRecommendedList((User) auth.getPrincipal()).keySet());
+        model.addAttribute("cbList", cbFilter.getRecommendedList((User) auth.getPrincipal()).keySet());
+        model.addAttribute("aList", rSystem.getRecommends((User) auth.getPrincipal()).keySet());
         return "common";
     }
 

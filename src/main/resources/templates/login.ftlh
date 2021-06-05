@@ -19,7 +19,7 @@
       <input type="password" id="password" name="password" class="form-control"/>
     </div>
   </div>
-  <div><input type="submit" value="Log In" class="btn btn-primary"/></div>
+  <div><input type="submit" value="Войти" class="btn btn-primary"/></div>
   <input type="hidden" name="_csrf" value="${_csrf.token}">
 </form>
 </@c.page>
