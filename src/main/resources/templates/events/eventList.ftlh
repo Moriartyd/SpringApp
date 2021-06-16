@@ -12,7 +12,7 @@
                         <a href="/events/managing/event/${event.id}">${event.name}</a>
                     </div>
                     <div class="col">
-                        ${event.attendedVisitors}
+                        ${event.registeredVisitors}
                     </div>
                     <div class="col">
                         <form method="post" action="/events/managing/event/${event.id}/delete">

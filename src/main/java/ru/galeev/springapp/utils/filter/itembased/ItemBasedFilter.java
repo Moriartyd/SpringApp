@@ -3,14 +3,19 @@ package ru.galeev.springapp.utils.filter.itembased;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.galeev.springapp.persistence.domain.Event;
+import ru.galeev.springapp.persistence.domain.Matrix;
 import ru.galeev.springapp.persistence.domain.MatrixPK;
 import ru.galeev.springapp.persistence.domain.User;
 import ru.galeev.springapp.persistence.repository.EventRepository;
 import ru.galeev.springapp.persistence.repository.MatrixRepository;
+import ru.galeev.springapp.persistence.repository.UserRepository;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+/*
+ *  КОллаборативная фильтрация
+ */
 @Service
 public class ItemBasedFilter {
 
@@ -18,6 +23,8 @@ public class ItemBasedFilter {
     MatrixRepository matrixRepository;
     @Autowired
     EventRepository eventRepository;
+    @Autowired
+    UserRepository userRepository;
 
     private static final int K = 5;
 
@@ -49,7 +56,8 @@ public class ItemBasedFilter {
         double znam = 0;
         for (int i = 0; i < K && iterator.hasNext(); i++) {
             Map.Entry<Event, Double> entry = iterator.next();
-            double rum = matrixRepository.findByMatrixPK(new MatrixPK(u, e)).getScore();
+            double rum = //Оценки пользователей u мероприятию j Пользователь, который оценил эвент E и эвент entry.getValue()
+                    matrixRepository.findByMatrixPK(new MatrixPK(u, entry.getKey())).getScore();
             chis += rum * entry.getValue();
             znam += Math.abs(entry.getValue());
         }
@@ -77,7 +85,35 @@ public class ItemBasedFilter {
     }
 
     private double getSim(Event a, Event m) {
-        List<User> users = matrixRepository.getU(a, m);
+
+//        List<User> userList = userRepository.findAll();
+//        users.clear();
+
+        List<User> users = new ArrayList<>();
+
+        List<User> x = matrixRepository.getU(a);
+        List<User> y = matrixRepository.getU(m);
+        for (User u : x.size() > y.size() ? y : x) {
+            if (y.contains(u)) {
+                users.add(u);
+            }
+        }
+
+//        for (User u : userList) {
+//            List<Matrix> mList = matrixRepository.findByUser(u);
+//            Matrix ma = matrixRepository.findByMatrixPK(new MatrixPK(u, a));
+//            Matrix mm = matrixRepository.findByMatrixPK(new MatrixPK(u, m));
+//
+//            if (mList.contains(ma) && mList.contains(mm)) {
+//                if (ma.getScore() != 0 && mm.getScore() != 0) {
+//                    users.add(u);
+//                }
+//            }
+//        }
+
+        if (users.size() == 0) {
+            return 0;
+        }
         double ra = (double) a.getRating() / a.getEvaluators();
         double rm = (double) m.getRating() / m.getEvaluators();
 
@@ -87,6 +123,7 @@ public class ItemBasedFilter {
 
         for (User u : users) {
             double rua = matrixRepository.findByMatrixPK(new MatrixPK(u, a)).getScore();
+//            System.out.println("User: " + u.getLogin() + "|||  Event: " + a.getName() + "||| rua: " + rua);
             double rum = matrixRepository.findByMatrixPK(new MatrixPK(u, m)).getScore();
 
             chis += (rua - ra) * (rum - rm);
@@ -94,6 +131,7 @@ public class ItemBasedFilter {
             znamR += (rum - rm) * (rum - rm);
         }
 
+        System.out.println("Event A: " + a.getName() + "  Event B: " + m.getName() + "|||||||SCORE:" + chis / Math.sqrt(znamL * znamR));
         return chis / Math.sqrt(znamL * znamR);
     }
 }

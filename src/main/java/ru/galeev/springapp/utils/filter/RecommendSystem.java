@@ -47,9 +47,9 @@ public class RecommendSystem {
         int flag = isNoScored(mList);
 
         LinkedHashMap<Event, Double> cbMap = cbFilter.getRecommendedList(user);
-        LinkedHashMap<Event, Double> ibMap = flag == 0 ? null : ibFilter.getRecommendedList(user);
+        LinkedHashMap<Event, Double> ibMap = flag < K ? null : ibFilter.getRecommendedList(user);
 
-        if (flag <= K) {
+        if (flag < K) {
             Iterator<Map.Entry<Event, Double>> itr = cbMap.entrySet().iterator();
             for (int i = 0; i < K_R && itr.hasNext(); i++) {
                 Map.Entry<Event, Double> obj = itr.next();
@@ -62,20 +62,28 @@ public class RecommendSystem {
             Iterator<Map.Entry<Event, Double>> cbItr = cbMap.entrySet().iterator();
             Iterator<Map.Entry<Event, Double>> ibItr = ibMap.entrySet().iterator();
             int i = 0;
-            while (i < K_R) {
+            while (i <= K_R) {
                 if (cbItr.hasNext()) {
                     Map.Entry<Event, Double> cb = cbItr.next();
 
                     if (ibItr.hasNext()) {
                         Map.Entry<Event, Double> ib = ibItr.next();
+//                        resultMap.put(ib.getKey(), ib.getValue());
 
-                        if (cb.getKey().equals(ib.getKey())) {
-                            resultMap.put(cb.getKey(), cb.getValue());
+                        if (ib.getKey().equals(cb.getKey())) {
+                            resultMap.put(ib.getKey(), ib.getValue());
                         } else {
                             resultMap.put(ib.getKey(), ib.getValue());
                         }
                     } else {
-                        resultMap.put(cb.getKey(), cb.getValue());
+                        Iterator<Map.Entry<Event, Double>> itr = cbMap.entrySet().iterator();
+                        while (i <= K_R && itr.hasNext()) {
+                            Map.Entry<Event, Double> n = itr.next();
+                            if (!resultMap.containsKey(n.getKey())) {
+                                resultMap.put(n.getKey(), n.getValue());
+                                i++;
+                            }
+                        }
                     }
                 }
                 i++;
@@ -87,7 +95,7 @@ public class RecommendSystem {
     private int isNoScored(List<Matrix> mList) {
         int i = 0;
         for (Matrix m : mList) {
-            if (m.getScore() != 0.0) {
+            if (m.getScore() != 0) {
                 i++;
             }
         }

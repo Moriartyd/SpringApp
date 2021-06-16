@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ru.galeev.springapp.enums.EventType;
 import ru.galeev.springapp.persistence.domain.*;
 import ru.galeev.springapp.persistence.repository.EventRepository;
+import ru.galeev.springapp.persistence.repository.MatrixRepository;
 import ru.galeev.springapp.persistence.repository.UserRepository;
 import ru.galeev.springapp.utils.DateFormatter;
 
@@ -28,6 +29,8 @@ public class EventService {
     UserRepository userRepository;
     @Autowired
     MatrixService matrixService;
+    @Autowired
+    MatrixRepository matrixRepository;
     @Autowired
     @Qualifier("MyGson")
     Gson gson;
@@ -118,14 +121,14 @@ public class EventService {
         Type type = new TypeToken<Map<String, Integer>>(){}.getType();
         event.setRating(event.getEvaluators() == 0 ? req : event.getRating() + req);
         event.setEvaluators(event.getEvaluators() + 1);
-        Matrix matrix = matrixService.matrixRepository.findByMatrixPK(new MatrixPK(user, event));
+        Matrix matrix = matrixRepository.findByMatrixPK(new MatrixPK(user, event));
         matrix.setScore(req);
         eventRepository.saveAndFlush(event);
-        matrixService.matrixRepository.saveAndFlush(matrix);
+        matrixRepository.saveAndFlush(matrix);
     }
 
     public double isRatedByUser(Event e, User u) {
-        Matrix m = matrixService.matrixRepository.findByMatrixPK(new MatrixPK(u, e));
+        Matrix m = matrixRepository.findByMatrixPK(new MatrixPK(u, e));
         return m.getScore();
     }
 }

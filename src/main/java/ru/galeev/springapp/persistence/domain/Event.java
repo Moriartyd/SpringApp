@@ -90,18 +90,8 @@ public class Event {
 
     @Getter
     @Setter
-    @Column(name = "middle_price")
-    private int middlePrice; // Средний чек
-
-    @Getter
-    @Setter
     @Column(name = "registered_visitors")
     private int registeredVisitors; // Количество зарегистрированных пользователей
-
-    @Getter
-    @Setter
-    @Column(name = "attended_visitors")
-    private int attendedVisitors; // Количество посетивших пользователей
 
     @Getter
     @Setter

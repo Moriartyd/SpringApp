@@ -26,7 +26,7 @@ public class ContentBasedFilter {
         Map<Event, Double> map = new LinkedHashMap<>();
         for (Event e : eventList) {
             double dice = getDice(userKeyWords, e.getKeywords());
-            if (dice != 0) {
+            if (dice != 0 && map.size() < 6) {
                 map.put(e, dice);
             }
         }

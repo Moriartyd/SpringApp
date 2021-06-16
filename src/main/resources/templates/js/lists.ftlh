@@ -137,11 +137,11 @@
                 let pbd = document.createElement("div");
                 pbd.setAttribute("class", "progress-bar");
                 pbd.setAttribute("role", "progressbar");
-                pbd.setAttribute("style", "width: " + event.rating*100/5 + "%;");
-                pbd.setAttribute("aria-valuenow", event.rating * 100 / 5);
+                pbd.setAttribute("style", "width: " + event.rating * 100/(5 * event.evaluators) + "%;");
+                pbd.setAttribute("aria-valuenow", event.rating * 100 /(5 * event.evaluators));
                 pbd.setAttribute("aria-valuemin", "0");
                 pbd.setAttribute("aria-valuemax", "100");
-                pdbtext = document.createTextNode(event.rating + "/5 баллов");
+                pdbtext = document.createTextNode(event.rating / event.evaluators + "/5 баллов");
                 pbd.appendChild(pdbtext);
                 pb.appendChild(pbd);
 
@@ -228,18 +228,18 @@
                 href.appendChild(document.createTextNode(place.owner.login));
                 text.appendChild(href);
 
-                let pb = document.createElement("div");
-                pb.setAttribute("class", "progress mb-3");
-                let pbd = document.createElement("div");
-                pbd.setAttribute("class", "progress-bar");
-                pbd.setAttribute("role", "progressbar");
-                pbd.setAttribute("style", "width: " + place.rating*100/5 + "%;");
-                pbd.setAttribute("aria-valuenow", place.rating * 100 / 5);
-                pbd.setAttribute("aria-valuemin", "0");
-                pbd.setAttribute("aria-valuemax", "100");
-                pdbtext = document.createTextNode(place.rating + "/5 баллов");
-                pbd.appendChild(pdbtext);
-                pb.appendChild(pbd);
+                // let pb = document.createElement("div");
+                // pb.setAttribute("class", "progress mb-3");
+                // let pbd = document.createElement("div");
+                // pbd.setAttribute("class", "progress-bar");
+                // pbd.setAttribute("role", "progressbar");
+                // pbd.setAttribute("style", "width: " + place.rating*100/5 + "%;");
+                // pbd.setAttribute("aria-valuenow", place.rating * 100 / 5);
+                // pbd.setAttribute("aria-valuemin", "0");
+                // pbd.setAttribute("aria-valuemax", "100");
+                // pdbtext = document.createTextNode(place.rating + "/5 баллов");
+                // pbd.appendChild(pdbtext);
+                // pb.appendChild(pbd);
 
                 let a = document.createElement("a");
                 a.className = "btn btn-primary";
@@ -249,7 +249,7 @@
 
                 cardbody.appendChild(title);
                 cardbody.appendChild(text);
-                cardbody.appendChild(pb);
+                // cardbody.appendChild(pb);
                 cardbody.appendChild(a);
                 card.appendChild(cardbody);
                 return card;

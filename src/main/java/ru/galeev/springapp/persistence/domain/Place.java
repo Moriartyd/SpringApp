@@ -42,21 +42,6 @@ public class Place {
 
     @Getter
     @Setter
-    @Column(name = "middle_price")
-    private int middlePrice;
-
-    @Getter
-    @Setter
-    @Column(name = "rating")
-    private double rating;
-
-    @Getter
-    @Setter
-    @Column(name = "evaluators")
-    private int evaluators;
-
-    @Getter
-    @Setter
     @ManyToOne
     @JoinColumn (name="owner")
     private User owner;
