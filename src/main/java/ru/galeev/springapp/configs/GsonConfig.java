@@ -8,8 +8,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class GsonConfig {
 
-    @Bean("MyGson")
-    public Gson getGson() {
+    @Bean
+    public Gson myGson() {
         return new GsonBuilder()
                 .setExclusionStrategies(new HiddenAnnotationExclusionStrategy())
                 .create();

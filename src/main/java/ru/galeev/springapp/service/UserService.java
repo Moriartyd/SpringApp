@@ -7,8 +7,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.galeev.springapp.enums.EventType;
 import ru.galeev.springapp.enums.Role;
-import ru.galeev.springapp.persistence.domain.Event;
-import ru.galeev.springapp.persistence.domain.User;
+import ru.galeev.springapp.persistence.domain.Calculation;
+import ru.galeev.springapp.persistence.domain.user.User;
 import ru.galeev.springapp.persistence.repository.UserRepository;
 
 import java.util.*;
@@ -80,7 +80,7 @@ public class UserService implements UserDetailsService {
         return list.isEmpty() ? null : list;
     }
 
-    public List<Event> getEventList(List<Event> list) {
+    public List<Calculation> getEventList(List<Calculation> list) {
         return list.isEmpty() ? null : list;
     }
 

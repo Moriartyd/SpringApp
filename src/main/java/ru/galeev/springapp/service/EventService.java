@@ -5,11 +5,11 @@ import com.google.gson.reflect.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 import ru.galeev.springapp.enums.EventType;
 import ru.galeev.springapp.persistence.domain.*;
-import ru.galeev.springapp.persistence.repository.EventRepository;
-import ru.galeev.springapp.persistence.repository.MatrixRepository;
+import ru.galeev.springapp.persistence.domain.user.User;
+import ru.galeev.springapp.persistence.repository.CalculationRepository;
+import ru.galeev.springapp.persistence.repository.ContractRequestRepository;
 import ru.galeev.springapp.persistence.repository.UserRepository;
 import ru.galeev.springapp.utils.DateFormatter;
 
@@ -24,13 +24,13 @@ import java.util.stream.Collectors;
 public class EventService {
 
     @Autowired
-    EventRepository eventRepository;
+    CalculationRepository calculationRepository;
     @Autowired
     UserRepository userRepository;
     @Autowired
     MatrixService matrixService;
     @Autowired
-    MatrixRepository matrixRepository;
+    ContractRequestRepository contractRequestRepository;
     @Autowired
     @Qualifier("MyGson")
     Gson gson;
@@ -39,7 +39,7 @@ public class EventService {
     private static final int INACTIVE = 0;
     private static final int RATING = 5;
 
-    public void createEvent(Event event, User user, Map<String, String> form) {
+    public void createEvent(Calculation event, User user, Map<String, String> form) {
         Set<String> types = Arrays.stream(EventType.values())
                 .map(EventType::name)
                 .collect(Collectors.toSet());
@@ -51,49 +51,49 @@ public class EventService {
         event.setActive(true);
         event.getEventManager().add(user);
         event.setRating(RATING);
-        eventRepository.saveAndFlush(event);
+        calculationRepository.saveAndFlush(event);
         matrixService.addEventToMatrix(event);
 
     }
 
-    public boolean checkRegistrationOnEvent(Event event, User user) {
+    public boolean checkRegistrationOnEvent(Calculation event, User user) {
         return event.getUserList().contains(user);
     }
 
-    public void subUserOnEvent(User user, Event event) {
+    public void subUserOnEvent(User user, Calculation event) {
         event.getUserList().add(user);
         event.setRegisteredVisitors(event.getRegisteredVisitors() + 1);
-        eventRepository.saveAndFlush(event);
+        calculationRepository.saveAndFlush(event);
     }
 
-    public void unSubUserOnEvent(User user, Event event) {
+    public void unSubUserOnEvent(User user, Calculation event) {
         event.getUserList().remove(user);
         event.setRegisteredVisitors(event.getRegisteredVisitors() - 1);
-        eventRepository.saveAndFlush(event);
+        calculationRepository.saveAndFlush(event);
     }
 
-    public List<User> getUserSubsOnEvent(User user, Event event) {
+    public List<User> getUserSubsOnEvent(User user, Calculation event) {
         user = userRepository.findUserById(user.getId());
         return user.getSubscriptions().stream()
                 .filter(u->u.getUserRegisteredEvents().contains(event))
                 .collect(Collectors.toList());
     }
 
-    public List<Event> getEventsByManager(User user) {
-        return eventRepository.findEventsByEventManager(user);
+    public List<Calculation> getEventsByManager(User user) {
+        return calculationRepository.findEventsByEventManager(user);
     }
 
-    public boolean checkForEditPossibility(Event event, User user) {
+    public boolean checkForEditPossibility(Calculation event, User user) {
         return event.getEventManager().contains(user);
     }
 
-    public void archiveEvent(Event event) {
+    public void archiveEvent(Calculation event) {
 //        event.setActive(INACTIVE);
 //        eventRepository.saveAndFlush(event);
-        eventRepository.delete(event);
+        calculationRepository.delete(event);
     }
 
-    public void editEvent(Event event,
+    public void editEvent(Calculation event,
                           String name,
                           String time,
                           int cost,
@@ -114,21 +114,21 @@ public class EventService {
                 event.getKeywords().add(EventType.valueOf(key));
             }
         }
-        eventRepository.saveAndFlush(event);
+        calculationRepository.saveAndFlush(event);
     }
 
-    public void setRating(Event event, User user, int req) {
+    public void setRating(Calculation event, User user, int req) {
         Type type = new TypeToken<Map<String, Integer>>(){}.getType();
         event.setRating(event.getEvaluators() == 0 ? req : event.getRating() + req);
         event.setEvaluators(event.getEvaluators() + 1);
-        Matrix matrix = matrixRepository.findByMatrixPK(new MatrixPK(user, event));
+        ContractRequest matrix = contractRequestRepository.findByMatrixPK(new MatrixPK(user, event));
         matrix.setScore(req);
-        eventRepository.saveAndFlush(event);
-        matrixRepository.saveAndFlush(matrix);
+        calculationRepository.saveAndFlush(event);
+        contractRequestRepository.saveAndFlush(matrix);
     }
 
-    public double isRatedByUser(Event e, User u) {
-        Matrix m = matrixRepository.findByMatrixPK(new MatrixPK(u, e));
+    public double isRatedByUser(Calculation e, User u) {
+        ContractRequest m = contractRequestRepository.findByMatrixPK(new MatrixPK(u, e));
         return m.getScore();
     }
 }

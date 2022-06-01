@@ -5,8 +5,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.galeev.springapp.persistence.domain.Event;
-import ru.galeev.springapp.persistence.domain.User;
+import ru.galeev.springapp.persistence.domain.Calculation;
+import ru.galeev.springapp.persistence.domain.user.User;
 import ru.galeev.springapp.service.EventService;
 import ru.galeev.springapp.utils.filter.RecommendSystem;
 import ru.galeev.springapp.utils.filter.contentbased.ContentBasedFilter;
@@ -37,7 +37,7 @@ public class EventController {
     }
 
     @GetMapping("/{id}")
-    public String getEventInfo(@PathVariable("id")Event event,
+    public String getEventInfo(@PathVariable("id") Calculation event,
                                Authentication auth,
                                Model model) {
         model.addAttribute("event", event);
@@ -49,7 +49,7 @@ public class EventController {
     }
 
     @GetMapping("/{id}/subs_visitors")
-    public String getSubsVisitors(@PathVariable("id")Event event,
+    public String getSubsVisitors(@PathVariable("id") Calculation event,
                                   Authentication auth,
                                   Model model) {
         model.addAttribute("users", eventService.getUserSubsOnEvent((User) auth.getPrincipal(), event));
@@ -59,7 +59,7 @@ public class EventController {
     }
 
     @GetMapping("/{id}/visitors")
-    public String getVisitors(@PathVariable("id")Event event, Model model) {
+    public String getVisitors(@PathVariable("id") Calculation event, Model model) {
         model.addAttribute("isOnEvent", true);
         model.addAttribute("users", event.getUserList());
         model.addAttribute("event", event);
@@ -67,7 +67,7 @@ public class EventController {
     }
 
     @PostMapping("/{id}/follow")
-    public String followEvent(@PathVariable("id")Event event,
+    public String followEvent(@PathVariable("id") Calculation event,
                               Authentication auth) {
 
         eventService.subUserOnEvent((User) auth.getPrincipal(), event);
@@ -75,7 +75,7 @@ public class EventController {
     }
 
     @PostMapping("/{id}/unFollow")
-    public String unfollowEvent(@PathVariable("id")Event event,
+    public String unfollowEvent(@PathVariable("id") Calculation event,
                               Authentication auth) {
 
         eventService.unSubUserOnEvent((User) auth.getPrincipal(), event);
@@ -83,7 +83,7 @@ public class EventController {
     }
 
     @PostMapping("/{id}/set_rating")
-    public String setRating(@PathVariable("id")Event event,
+    public String setRating(@PathVariable("id") Calculation event,
                             @RequestParam Map<String, String> form,
                             Authentication auth) {
         eventService.setRating(event, (User) auth.getPrincipal(), Integer.parseInt(form.get("rating")));

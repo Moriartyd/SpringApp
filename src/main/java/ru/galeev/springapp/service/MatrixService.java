@@ -2,12 +2,11 @@ package ru.galeev.springapp.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.galeev.springapp.persistence.domain.Event;
-import ru.galeev.springapp.persistence.domain.Matrix;
-import ru.galeev.springapp.persistence.domain.MatrixPK;
-import ru.galeev.springapp.persistence.domain.User;
-import ru.galeev.springapp.persistence.repository.EventRepository;
-import ru.galeev.springapp.persistence.repository.MatrixRepository;
+import ru.galeev.springapp.persistence.domain.Calculation;
+import ru.galeev.springapp.persistence.domain.ContractRequest;
+import ru.galeev.springapp.persistence.domain.user.User;
+import ru.galeev.springapp.persistence.repository.CalculationRepository;
+import ru.galeev.springapp.persistence.repository.ContractRequestRepository;
 import ru.galeev.springapp.persistence.repository.UserRepository;
 
 import java.util.List;
@@ -15,29 +14,29 @@ import java.util.List;
 @Service
 public class MatrixService {
     @Autowired
-    EventRepository eventRepository;
+    CalculationRepository calculationRepository;
     @Autowired
     UserRepository userRepository;
     @Autowired
-    MatrixRepository matrixRepository;
+    ContractRequestRepository contractRequestRepository;
 
     public void addUserToMatrix(User user) {
-        List<Event> eventList = eventRepository.findAllByActiveTrue();
-        for (Event e : eventList) {
-            Matrix m = new Matrix(new MatrixPK(user, e));
+        List<Calculation> eventList = calculationRepository.findAllByActiveTrue();
+        for (Calculation e : eventList) {
+            ContractRequest m = new ContractRequest(new MatrixPK(user, e));
             m.setFilteredScore(0);
             m.setScore(0);
-            matrixRepository.save(m);
+            contractRequestRepository.save(m);
         }
     }
 
-    public void addEventToMatrix(Event event) {
+    public void addEventToMatrix(Calculation event) {
         List<User> userList = userRepository.findAllByActiveTrue();
         for (User u : userList) {
-            Matrix m = new Matrix(new MatrixPK(u, event));
+            ContractRequest m = new ContractRequest(new MatrixPK(u, event));
             m.setFilteredScore(0);
             m.setScore(0);
-            matrixRepository.save(m);
+            contractRequestRepository.save(m);
         }
     }
 

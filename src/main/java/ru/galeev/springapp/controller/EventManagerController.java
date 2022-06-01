@@ -1,16 +1,15 @@
 package ru.galeev.springapp.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.annotation.Transient;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.galeev.springapp.enums.EventType;
-import ru.galeev.springapp.persistence.domain.Event;
+import ru.galeev.springapp.persistence.domain.Calculation;
 import ru.galeev.springapp.persistence.domain.Place;
-import ru.galeev.springapp.persistence.domain.User;
+import ru.galeev.springapp.persistence.domain.user.User;
 import ru.galeev.springapp.service.EventService;
 import ru.galeev.springapp.service.PlaceService;
 import ru.galeev.springapp.utils.DateFormatter;
@@ -35,7 +34,7 @@ public class EventManagerController {
     }
 
     @PostMapping("/registration")
-    public String createEvent(Event event,
+    public String createEvent(Calculation event,
                               @RequestParam Map<String, String> form,
                               Authentication auth) {
         eventService.createEvent(event, (User) auth.getPrincipal(), form);
@@ -51,7 +50,7 @@ public class EventManagerController {
 
 //    @Transient
     @GetMapping("event/{id}")
-    public String getOneEvent(@PathVariable("id") Event event,
+    public String getOneEvent(@PathVariable("id") Calculation event,
                               Authentication auth,
                               Model model) {
         model.addAttribute("canEdit", eventService.checkForEditPossibility(event, (User) auth.getPrincipal()));
@@ -63,13 +62,13 @@ public class EventManagerController {
     }
 
     @PostMapping("event/{id}/delete")
-    public String deleteEvent(@PathVariable("id") Event event) {
+    public String deleteEvent(@PathVariable("id") Calculation event) {
         eventService.archiveEvent(event);
         return "redirect:/events/managing/my_events";
     }
 
     @PostMapping("event/{id}")
-    public String editEvent(@PathVariable("id") Event event,
+    public String editEvent(@PathVariable("id") Calculation event,
                             @RequestParam("name") String name,
                             @RequestParam("time") String time,
                             @RequestParam("cost") int cost,

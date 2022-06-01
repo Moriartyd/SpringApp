@@ -9,11 +9,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import ru.galeev.springapp.persistence.domain.Event;
+import ru.galeev.springapp.persistence.domain.Calculation;
 import ru.galeev.springapp.persistence.domain.Place;
-import ru.galeev.springapp.persistence.domain.User;
-import ru.galeev.springapp.persistence.repository.EventRepository;
-import ru.galeev.springapp.persistence.repository.PlaceRepository;
+import ru.galeev.springapp.persistence.domain.user.User;
+import ru.galeev.springapp.persistence.repository.CalculationRepository;
 
 import java.util.List;
 
@@ -25,7 +24,7 @@ public class PlaceManagerController {
     @Autowired
     PlaceRepository placeRepository;
     @Autowired
-    EventRepository eventRepository;
+    CalculationRepository calculationRepository;
 
     @GetMapping("/registration")
     public String getRegistrationForm() {
@@ -43,7 +42,7 @@ public class PlaceManagerController {
     @GetMapping("/{id}")
     public String getOnePlace(@PathVariable("id") Place place, Model model) {
         model.addAttribute("place", place);
-        model.addAttribute("event_cnt", eventRepository.findEventsByPlace(place).size());
+        model.addAttribute("event_cnt", calculationRepository.findEventsByPlace(place).size());
         return "place/id";
     }
 
@@ -58,10 +57,10 @@ public class PlaceManagerController {
     @PostMapping("{id}/delete")
     public String deletePlace(@PathVariable("id") Place place) {
         Place servicePlace = placeRepository.getServicePlace();
-        List<Event> eventList = eventRepository.findEventsByPlace(place);
-        for (Event event : eventList) {
+        List<Calculation> eventList = calculationRepository.findEventsByPlace(place);
+        for (Calculation event : eventList) {
             event.setPlace(servicePlace);
-            eventRepository.saveAndFlush(event);
+            calculationRepository.saveAndFlush(event);
         }
         placeRepository.delete(place);
         return "redirect:/place/managing/my_places";

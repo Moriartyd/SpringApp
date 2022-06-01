@@ -8,8 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.galeev.springapp.enums.EventType;
 import ru.galeev.springapp.enums.Role;
 import ru.galeev.springapp.service.UserService;
-import ru.galeev.springapp.persistence.domain.User;
-import ru.galeev.springapp.persistence.repository.UserRepository;
+import ru.galeev.springapp.persistence.domain.user.User;
 
 import java.util.Map;
 

@@ -3,7 +3,6 @@ package ru.galeev.springapp.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.galeev.springapp.persistence.domain.Place;
-import ru.galeev.springapp.persistence.repository.PlaceRepository;
 
 import java.util.List;
 

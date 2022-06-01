@@ -2,19 +2,18 @@ package ru.galeev.springapp.persistence.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import ru.galeev.springapp.persistence.domain.Event;
-import ru.galeev.springapp.persistence.domain.Matrix;
-import ru.galeev.springapp.persistence.domain.MatrixPK;
-import ru.galeev.springapp.persistence.domain.User;
+import ru.galeev.springapp.persistence.domain.Calculation;
+import ru.galeev.springapp.persistence.domain.ContractRequest;
+import ru.galeev.springapp.persistence.domain.user.User;
 
 import java.util.List;
 
-public interface MatrixRepository extends JpaRepository<Matrix, MatrixPK> {
+public interface ContractRequestRepository extends JpaRepository<ContractRequest, Long> {
 
-    Matrix findByMatrixPK(MatrixPK matrixPK);
+    ContractRequest findByCalculationId(Long calculationId);
 
-    @Query(value = "select m from Matrix m where m.matrixPK.user = ?1")
-    List<Matrix> findByUser(User user);
+    @Query(value = "select m from ContractRequest m where m.matrixPK.user = ?1")
+    List<ContractRequest> findByUser(User user);
 //    @Query(value = "select distinct m.matrixPK.user from Matrix m " +
 //            "where exists " +
 //            "(select a.matrixPK.user from Matrix a where a.matrixPK.event = ?1 and a.score > 0) " +
@@ -33,9 +32,9 @@ public interface MatrixRepository extends JpaRepository<Matrix, MatrixPK> {
 //            "  and second_event = ?2\n" +
 //            "  and second_score <> 0\n" +
 //            "  and first_score <> 0")
-    @Query(value = "select m.matrixPK.user from Matrix m where m.matrixPK.event = ?1 and m.score <> 0")
-    List<User> getU(Event x);
+    @Query(value = "select m.matrixPK.user from ContractRequest m where m.matrixPK.event = ?1 and m.score <> 0")
+    List<User> getU(Calculation x);
 
-    @Query(value = "select m.matrixPK.event from Matrix m where m.matrixPK.user = ?1 and m.score = 0")
-    List<Event> getUnscoredByUser(User u);
+    @Query(value = "select m.matrixPK.event from ContractRequest m where m.matrixPK.user = ?1 and m.score = 0")
+    List<Calculation> getUnscoredByUser(User u);
 }

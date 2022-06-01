@@ -3,10 +3,10 @@ package ru.galeev.springapp.utils.filter.contentbased;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.galeev.springapp.enums.EventType;
-import ru.galeev.springapp.persistence.domain.Event;
-import ru.galeev.springapp.persistence.domain.User;
-import ru.galeev.springapp.persistence.repository.EventRepository;
-import ru.galeev.springapp.persistence.repository.MatrixRepository;
+import ru.galeev.springapp.persistence.domain.Calculation;
+import ru.galeev.springapp.persistence.domain.user.User;
+import ru.galeev.springapp.persistence.repository.CalculationRepository;
+import ru.galeev.springapp.persistence.repository.ContractRequestRepository;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -15,16 +15,16 @@ import java.util.stream.Collectors;
 public class ContentBasedFilter {
 
     @Autowired
-    MatrixRepository matrixRepository;
+    ContractRequestRepository contractRequestRepository;
     @Autowired
-    EventRepository eventRepository;
+    CalculationRepository calculationRepository;
 
-    public LinkedHashMap<Event, Double> getRecommendedList(User u) {
-        List<Event> eventList = matrixRepository.getUnscoredByUser(u);
+    public LinkedHashMap<Calculation, Double> getRecommendedList(User u) {
+        List<Calculation> eventList = contractRequestRepository.getUnscoredByUser(u);
         Set<EventType> userKeyWords = u.getKeywords();
 
-        Map<Event, Double> map = new LinkedHashMap<>();
-        for (Event e : eventList) {
+        Map<Calculation, Double> map = new LinkedHashMap<>();
+        for (Calculation e : eventList) {
             double dice = getDice(userKeyWords, e.getKeywords());
             if (dice != 0 && map.size() < 6) {
                 map.put(e, dice);

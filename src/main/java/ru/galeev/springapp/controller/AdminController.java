@@ -1,12 +1,11 @@
 package ru.galeev.springapp.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.galeev.springapp.enums.Role;
-import ru.galeev.springapp.persistence.domain.*;
+import ru.galeev.springapp.persistence.domain.user.User;
 import ru.galeev.springapp.service.UserService;
 
 import java.util.*;
@@ -16,8 +15,11 @@ import java.util.*;
 @PreAuthorize("hasAuthority('ADMIN')")
 public class AdminController {
 
-    @Autowired
-    UserService userService;
+    private final UserService userService;
+
+    public AdminController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping
     public String getAllUsers(Model model) {

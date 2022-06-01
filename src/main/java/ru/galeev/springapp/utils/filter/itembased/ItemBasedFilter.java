@@ -2,12 +2,10 @@ package ru.galeev.springapp.utils.filter.itembased;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.galeev.springapp.persistence.domain.Event;
-import ru.galeev.springapp.persistence.domain.Matrix;
-import ru.galeev.springapp.persistence.domain.MatrixPK;
-import ru.galeev.springapp.persistence.domain.User;
-import ru.galeev.springapp.persistence.repository.EventRepository;
-import ru.galeev.springapp.persistence.repository.MatrixRepository;
+import ru.galeev.springapp.persistence.domain.Calculation;
+import ru.galeev.springapp.persistence.domain.user.User;
+import ru.galeev.springapp.persistence.repository.CalculationRepository;
+import ru.galeev.springapp.persistence.repository.ContractRequestRepository;
 import ru.galeev.springapp.persistence.repository.UserRepository;
 
 import java.util.*;
@@ -20,20 +18,20 @@ import java.util.stream.Collectors;
 public class ItemBasedFilter {
 
     @Autowired
-    MatrixRepository matrixRepository;
+    ContractRequestRepository contractRequestRepository;
     @Autowired
-    EventRepository eventRepository;
+    CalculationRepository calculationRepository;
     @Autowired
     UserRepository userRepository;
 
     private static final int K = 5;
 
-    public LinkedHashMap<Event, Double> getRecommendedList(User u) {
-        List<Event> eventList = matrixRepository.getUnscoredByUser(u);
+    public LinkedHashMap<Calculation, Double> getRecommendedList(User u) {
+        List<Calculation> eventList = contractRequestRepository.getUnscoredByUser(u);
 
-        Map<Event, Double> map = new LinkedHashMap<>();
+        Map<Calculation, Double> map = new LinkedHashMap<>();
 
-        for (Event e : eventList) {
+        for (Calculation e : eventList) {
             Double score = getRecommendedScore(u, e);
             if (!score.isNaN()) {
                 map.put(e, score);
@@ -49,28 +47,28 @@ public class ItemBasedFilter {
                         LinkedHashMap::new));
     }
 
-    private Double getRecommendedScore(User u, Event e) {
-        Iterator<Map.Entry<Event, Double>> iterator = getSortedMap(e).entrySet().iterator();
+    private Double getRecommendedScore(User u, Calculation e) {
+        Iterator<Map.Entry<Calculation, Double>> iterator = getSortedMap(e).entrySet().iterator();
 
         double chis = 0;
         double znam = 0;
         for (int i = 0; i < K && iterator.hasNext(); i++) {
-            Map.Entry<Event, Double> entry = iterator.next();
+            Map.Entry<Calculation, Double> entry = iterator.next();
             double rum = //Оценки пользователей u мероприятию j Пользователь, который оценил эвент E и эвент entry.getValue()
-                    matrixRepository.findByMatrixPK(new MatrixPK(u, entry.getKey())).getScore();
+                    contractRequestRepository.findByMatrixPK(new MatrixPK(u, entry.getKey())).getScore();
             chis += rum * entry.getValue();
             znam += Math.abs(entry.getValue());
         }
         return chis / znam;
     }
 
-    private Map<Event, Double> getSortedMap(Event e) {
-        List<Event> eventList = eventRepository.findAll();
+    private Map<Calculation, Double> getSortedMap(Calculation e) {
+        List<Calculation> eventList = calculationRepository.findAll();
         eventList.remove(e);
 
-        Map<Event, Double> eventMap = new HashMap<>();
+        Map<Calculation, Double> eventMap = new HashMap<>();
 
-        for (Event event : eventList) {
+        for (Calculation event : eventList) {
             eventMap.put(event, getSim(event, e));
         }
 
@@ -84,15 +82,15 @@ public class ItemBasedFilter {
                         LinkedHashMap::new));
     }
 
-    private double getSim(Event a, Event m) {
+    private double getSim(Calculation a, Calculation m) {
 
 //        List<User> userList = userRepository.findAll();
 //        users.clear();
 
         List<User> users = new ArrayList<>();
 
-        List<User> x = matrixRepository.getU(a);
-        List<User> y = matrixRepository.getU(m);
+        List<User> x = contractRequestRepository.getU(a);
+        List<User> y = contractRequestRepository.getU(m);
         for (User u : x.size() > y.size() ? y : x) {
             if (y.contains(u)) {
                 users.add(u);
@@ -122,9 +120,9 @@ public class ItemBasedFilter {
         double znamR = 0;
 
         for (User u : users) {
-            double rua = matrixRepository.findByMatrixPK(new MatrixPK(u, a)).getScore();
+            double rua = contractRequestRepository.findByMatrixPK(new MatrixPK(u, a)).getScore();
 //            System.out.println("User: " + u.getLogin() + "|||  Event: " + a.getName() + "||| rua: " + rua);
-            double rum = matrixRepository.findByMatrixPK(new MatrixPK(u, m)).getScore();
+            double rum = contractRequestRepository.findByMatrixPK(new MatrixPK(u, m)).getScore();
 
             chis += (rua - ra) * (rum - rm);
             znamL += (rua - ra) * (rua - ra);

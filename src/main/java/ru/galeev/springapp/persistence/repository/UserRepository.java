@@ -1,8 +1,8 @@
 package ru.galeev.springapp.persistence.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ru.galeev.springapp.persistence.domain.Event;
-import ru.galeev.springapp.persistence.domain.User;
+import ru.galeev.springapp.persistence.domain.Calculation;
+import ru.galeev.springapp.persistence.domain.user.User;
 
 import java.util.List;
 
@@ -11,9 +11,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User findUserByLogin(String login);
     User saveAndFlush(User user);
     User findUserById(long id);
-    User findByActivationCode(String code);
     List<User> findAllByActiveTrue();
     List<User> findAllByRoleEqualsAndActiveIsTrue(String role);
-
-    User findUserByEventList(Event event);
 }
