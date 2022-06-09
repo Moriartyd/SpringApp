@@ -18,11 +18,11 @@ public class ContractRequest {
     private Long calculationId;
 
     @ManyToOne
-    @Column(name = "user_id")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne
-    @Column(name = "contractor_id")
+    @JoinColumn(name = "contractor_id")
     private Contractor contractor;
 
     @Column(name = "status_contractor")

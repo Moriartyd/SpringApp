@@ -1,21 +1,21 @@
 <#import "../parts/common.ftlh" as c>
 <#include "../parts/security.ftlh">
-<@c.page "Мои мероприятия">
-    <#list eventList as event>
+<@c.page "Мои расчеты">
+    <#list calcList as calc>
             <div class="container mb-3">
-                <#if event.active??>
+                <#if calc.active??>
                 <div class="row">
                     <div class="col">
-                        <i>${event.id}</i>
+                        <i>${calc.id}</i>
                     </div>
                     <div class="col">
-                        <a href="/events/managing/event/${event.id}">${event.name}</a>
+                        <a href="/calc/${calc.id}">№${calc.id}</a>
                     </div>
+<#--                    <div class="col">-->
+<#--                        ${calc.registeredVisitors}-->
+<#--                    </div>-->
                     <div class="col">
-                        ${event.registeredVisitors}
-                    </div>
-                    <div class="col">
-                        <form method="post" action="/events/managing/event/${event.id}/delete">
+                        <form method="post" action="/events/managing/event/${calc.id}/delete">
                             <input type="submit" value="Архивировать" class="btn btn-primary">
                             <input type="hidden" name="_csrf" value="${_csrf.token}">
                         </form>

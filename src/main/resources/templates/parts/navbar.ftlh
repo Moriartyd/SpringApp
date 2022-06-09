@@ -25,17 +25,17 @@
                     <a class="nav-link" aria-current="page" href="/admin">Администрирование</a>
                 </li>
                 </#if>
-                <#if isContractor>
+<#--                <#if isOutstaff>-->
+<#--                    <li class="nav-item">-->
+<#--                        <a class="nav-link" aria-current="page" href="/events/managing/registration">Запросы на контракты</a>-->
+<#--                    </li>-->
+<#--                    <li class="nav-item">-->
+<#--                        <a class="nav-link" aria-current="page" href="/events/managing/my_events">Мои контракты</a>-->
+<#--                    </li>-->
+<#--                </#if>-->
+                <#if isAdmin == false>
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="/events/managing/registration">Запросы на контракты</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="/events/managing/my_events">Мои контракты</a>
-                    </li>
-                </#if>
-                <#if isAdmin == false && isContractor == false>
-                    <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="/place/managing/registration"></a>
+                        <a class="nav-link" aria-current="page" href="/place/managing/registration">Мои контракты</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" aria-current="page" href="/place/managing/my_places">Мои расчеты</a>

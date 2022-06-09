@@ -49,51 +49,48 @@ public class UserController {
                              Model model,
                              Authentication auth) {
         model.addAttribute("user", user);
-        model.addAttribute("event_cnt", user.getUserRegisteredEvents().size());
-        model.addAttribute("followers_cnt", user.getFollowers().size());
-        model.addAttribute("subscriptions_cnt", user.getSubscriptions().size());
-        model.addAttribute("isSubscription", user.getFollowers().contains((User) auth.getPrincipal()));
-        if (Role.valueOf(user.getRole()) == Role.MANAGER) {
-            model.addAttribute("managed_events_cnt", user.getEventList().size());
+        model.addAttribute("contracts_cnt", userService.getContracts(user).size());
+       if (Role.valueOf(user.getRole()) == Role.USER) {
+            model.addAttribute("calcs_cnt", userService.getCalculations(user).size());
         }
         return "user/id";
     }
 
-//    @GetMapping("{id}/subs")
-//    public String showSubs(@PathVariable("id") User user,
-//                           Model model) {
-//        model.addAttribute("isSubs", true);
-//        model.addAttribute("users", userService.getUserList(user.getSubscriptions()));
-//        model.addAttribute("user", user);
-//        return "user/cards";
-//    }
-//
-//    @GetMapping("{id}/followers")
-//    public String showFollowers(@PathVariable("id") User user,
-//                           Model model) {
-//        model.addAttribute("isFollowers", true);
-//        model.addAttribute("users", userService.getUserList(user.getFollowers()));
-//        model.addAttribute("user", user);
-//        return "user/cards";
-//    }
+    @GetMapping("{id}/contracts")
+    public String showContracts(@PathVariable("id") User user,
+                           Model model) {
+        model.addAttribute("isContracts", true);
+        model.addAttribute("contracts", userService.getContracts(user));
+        model.addAttribute("user", user);
+        return "user/cards";
+    }
+
+    @GetMapping("{id}/calcs")
+    public String showFollowers(@PathVariable("id") User user,
+                           Model model) {
+        model.addAttribute("isCalcs", true);
+        model.addAttribute("calcs", userService.getCalculations(user));
+        model.addAttribute("user", user);
+        return "user/cards";
+    }
 
     @GetMapping("{id}/events")
     public String showCalcs(@PathVariable("id") User user,
                                 Model model) {
         model.addAttribute("isForUser", true);
-        model.addAttribute("calculations", userService.getCalculationList();
+        model.addAttribute("calculations", userService.getCalculations(user));
         model.addAttribute("user", user);
         return "events/cards";
     }
 
-    @GetMapping("{id}/managed_events")
-    public String showManagedEvents(@PathVariable("id") User user,
-                             Model model) {
-        model.addAttribute("isByUser", true);
-        model.addAttribute("events", userService.getEventList(user.getEventList()));
-        model.addAttribute("user", user);
-        return "events/cards";
-    }
+//    @GetMapping("{id}/managed_events")
+//    public String showManagedEvents(@PathVariable("id") User user,
+//                             Model model) {
+//        model.addAttribute("isByUser", true);
+//        model.addAttribute("events", userService.getEventList(user.getEventList()));
+//        model.addAttribute("user", user);
+//        return "events/cards";
+//    }
 
     @GetMapping("/{id}/edit")
     public String showEditPage(@PathVariable("id") User user, Model model) {
@@ -102,19 +99,19 @@ public class UserController {
         return "user/edit";
     }
 
-    @PostMapping("/{id}/follow")
-    public String addFollower(@PathVariable("id") User obj,
-                              Authentication auth) {
-        userService.followUser(obj, (User) auth.getPrincipal());
-        return "redirect:/user/" + obj.getId();
-    }
+//    @PostMapping("/{id}/follow")
+//    public String addFollower(@PathVariable("id") User obj,
+//                              Authentication auth) {
+//        userService.followUser(obj, (User) auth.getPrincipal());
+//        return "redirect:/user/" + obj.getId();
+//    }
 
-    @PostMapping("/{id}/unFollow")
-    public String removeFollower(@PathVariable("id") User obj,
-                              Authentication auth) {
-        userService.unFollowUser(obj, (User) auth.getPrincipal());
-        return "redirect:/user/" + obj.getId();
-    }
+//    @PostMapping("/{id}/unFollow")
+//    public String removeFollower(@PathVariable("id") User obj,
+//                              Authentication auth) {
+//        userService.unFollowUser(obj, (User) auth.getPrincipal());
+//        return "redirect:/user/" + obj.getId();
+//    }
 
     @PostMapping("/{id}/edit")
     public String editYourself(@PathVariable("id") User user,

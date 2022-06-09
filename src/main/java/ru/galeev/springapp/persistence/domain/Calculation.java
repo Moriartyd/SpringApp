@@ -2,22 +2,28 @@ package ru.galeev.springapp.persistence.domain;
 
 import lombok.Getter;
 import lombok.Setter;
+import ru.galeev.springapp.persistence.domain.tech.*;
+import ru.galeev.springapp.persistence.domain.user.User;
 
 import javax.persistence.*;
 
 @Entity
+@Getter
 @Table(name = "calculation")
 public class Calculation {
 
     @Id
-    @Getter
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Getter
     @Setter
     @Column(name = "active")
     private boolean active;
+
+    @Setter
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Setter
     @Column(name = "cost")
@@ -36,26 +42,33 @@ public class Calculation {
     private Integer floors; // X координата геопозиции
 
     @Setter
+    @OneToOne
     @JoinColumn(name = "tech_carrier_wall")
-    private Integer techCarrierWall; // Y координата геопозиции
+    private TechCarrierWall techCarrierWall; // Y координата геопозиции
     @Setter
+    @OneToOne
     @JoinColumn(name = "tech_exterior")
-    private Integer techExterior; // Y координата геопозиции
+    private TechExterior techExterior; // Y координата геопозиции
     @Setter
+    @OneToOne
     @JoinColumn(name = "tech_foundation")
-    private Integer techFoundation; // Y координата геопозиции
+    private TechFoundation techFoundation; // Y координата геопозиции
     @Setter
+    @OneToOne
     @JoinColumn(name = "tech_overlaps")
-    private Integer techOverlaps; // Y координата геопозиции
+    private TechOverlaps techOverlaps; // Y координата геопозиции
     @Setter
+    @OneToOne
     @JoinColumn(name = "tech_roof")
-    private Integer techRoof; // Y координата геопозиции
+    private TechRoof techRoof; // Y координата геопозиции
     @Setter
+    @OneToOne
     @JoinColumn(name = "tech_ladder")
-    private Integer techLadder; // Y координата геопозиции
+    private TechLadder techLadder; // Y координата геопозиции
     @Setter
+    @OneToOne
     @JoinColumn(name = "tech_interior")
-    private Integer techInterior; // Y координата геопозиции
+    private TechInterior techInterior; // Y координата геопозиции
 
     @Setter
     @Column(name = "tech_partitions")

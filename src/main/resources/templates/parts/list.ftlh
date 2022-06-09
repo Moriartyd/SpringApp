@@ -1,7 +1,7 @@
 <#import "cards.ftlh" as card>
 
 <#--    TODO: ПЕРЕДЕЛАТЬ    -->
-<#macro list someList isUser isPlace isEvent>
+<#macro list someList isContracts isCalcs user>
     <#assign i = -1>
     <#list someList as obj>
         <#assign i++>
@@ -9,12 +9,10 @@
             <div class="row">
         </#if>
         <div class="col-sm-3 mb-4">
-            <#if isUser>
-                <@card.usercard obj/>
-            <#elseif isPlace>
-                <@card.placecard obj/>
-            <#elseif isEvent>
-                <@card.eventcard obj/>
+            <#if isContracts>
+                <@card.contractcard obj/>
+            <#elseif isCalcs>
+                <@card.calccard obj user/>
             </#if>
         </div>
         <#if i == 2>

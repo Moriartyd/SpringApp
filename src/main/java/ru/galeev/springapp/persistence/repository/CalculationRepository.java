@@ -9,7 +9,7 @@ import java.util.List;
 public interface CalculationRepository extends JpaRepository<Calculation, Long> {
     Calculation saveAndFlush(Calculation calculation);
     Calculation findById(Calculation event);
-    List<Calculation> findAllByUserId(User user);
+    List<Calculation> findByUser(User user);
 
     List<Calculation> findAllByActiveTrue();
 }

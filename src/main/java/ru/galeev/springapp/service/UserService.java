@@ -1,14 +1,17 @@
 package ru.galeev.springapp.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import ru.galeev.springapp.enums.EventType;
 import ru.galeev.springapp.enums.Role;
 import ru.galeev.springapp.persistence.domain.Calculation;
+import ru.galeev.springapp.persistence.domain.ContractRequest;
+import ru.galeev.springapp.persistence.domain.user.Contractor;
 import ru.galeev.springapp.persistence.domain.user.User;
+import ru.galeev.springapp.persistence.repository.CalculationRepository;
+import ru.galeev.springapp.persistence.repository.ContractRequestRepository;
+import ru.galeev.springapp.persistence.repository.ContractorRepository;
 import ru.galeev.springapp.persistence.repository.UserRepository;
 
 import java.util.*;
@@ -18,17 +21,20 @@ import java.util.stream.Collectors;
 public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
-    private final MailService mailService;
-    private final MatrixService matrixService;
+    private final ContractRequestRepository contractRequestRepository;
+    private final ContractorRepository contractorRepository;
+    private final CalculationRepository calculationRepository;
 
     private final static String link = "http://192.168.1.70:8090";
 
     public UserService(UserRepository userRepository,
-                       MailService mailService,
-                       MatrixService matrixService) {
+                       ContractRequestRepository contractRequestRepository,
+                       ContractorRepository contractorRepository,
+                       CalculationRepository calculationRepository) {
         this.userRepository = userRepository;
-        this.mailService = mailService;
-        this.matrixService = matrixService;
+        this.contractRequestRepository = contractRequestRepository;
+        this.contractorRepository = contractorRepository;
+        this.calculationRepository = calculationRepository;
     }
 
     @Override
@@ -62,42 +68,33 @@ public class UserService implements UserDetailsService {
 //                user.getKeywords().add(EventType.valueOf(key));
 //            }
 //        }
-        user.setActive(true);
+//        user.setAc(true);
         user.setRole(Role.USER.getAuthority());
 
         userRepository.saveAndFlush(user);
-        matrixService.addUserToMatrix(user);
         return true;
     }
 
-    public boolean activateUser(String code) {
-        User user = userRepository.findByActivationCode(code);
-        if (user == null) {
-            return false;
-        }
-        user.setActivationCode(null);
-        user.setActive(true);
-        userRepository.saveAndFlush(user);
-        return true;
-    }
+//    public boolean activateUser(String code) {
+//        User user = userRepository.findByActivationCode(code);
+//        if (user == null) {
+//            return false;
+//        }
+//        user.setActivationCode(null);
+//        user.setActive(true);
+//        userRepository.saveAndFlush(user);
+//        return true;
+//    }
 
-    public List<User> getUserList(List<User> list) {
-        return list.isEmpty() ? null : list;
-    }
+//    public void followUser(User obj, User user) {
+//        obj.getFollowers().add(user);
+//        userRepository.saveAndFlush(obj);
+//    }
 
-    public List<Calculation> getEventList(List<Calculation> list) {
-        return list.isEmpty() ? null : list;
-    }
-
-    public void followUser(User obj, User user) {
-        obj.getFollowers().add(user);
-        userRepository.saveAndFlush(obj);
-    }
-
-    public void unFollowUser(User obj, User user) {
-        obj.getFollowers().remove(user);
-        userRepository.saveAndFlush(obj);
-    }
+//    public void unFollowUser(User obj, User user) {
+//        obj.getFollowers().remove(user);
+//        userRepository.saveAndFlush(obj);
+//    }
 
     public List<User> getAllUsers() {
         List<User> userList = userRepository.findAll();
@@ -106,9 +103,8 @@ public class UserService implements UserDetailsService {
     }
 
     public void deleteUser(User user) {
-//        userRepository.delete(user);
-        user.setActive(false);
-        userRepository.saveAndFlush(user);
+        userRepository.delete(user);
+//        userRepository.saveAndFlush(user);
     }
 
     public void editUser(User user, String login, Map<String, String> form) {
@@ -137,7 +133,7 @@ public class UserService implements UserDetailsService {
         if (!surname.isEmpty()) {
             user.setSurname(surname);
         }
-        if (age > user.getAge()) {
+        if (age != user.getAge()) {
             user.setAge(age);
         }
         if (!password.isEmpty()) {
@@ -146,15 +142,31 @@ public class UserService implements UserDetailsService {
         if (!email.isEmpty()) {
             user.setEmail(email);
         }
-        user.getKeywords().clear();
-        Set<String> types = Arrays.stream(EventType.values())
-                .map(EventType::name)
-                .collect(Collectors.toSet());
-        for (String key : form.keySet()) {
-            if (types.contains(key)) {
-                user.getKeywords().add(EventType.valueOf(key));
-            }
-        }
+//        Set<String> types = Arrays.stream(EventType.values())
+//                .map(EventType::name)
+//                .collect(Collectors.toSet());
+//        for (String key : form.keySet()) {
+//            if (types.contains(key)) {
+//                user.getKeywords().add(EventType.valueOf(key));
+//            }
+//        }
         userRepository.saveAndFlush(user);
+    }
+
+    public List<ContractRequest> getContracts(User user) {
+        if (user.getRole().equals(Role.OUTSTAFF)) {
+            Contractor contractor = contractorRepository.findByUser(user);
+            if (contractor != null) {
+                return contractRequestRepository.findByContractorAccepted(contractor, 1);
+            } else {
+                return null;
+            }
+        } else {
+            return contractRequestRepository.findByUser(user);
+        }
+    }
+
+    public List<Calculation> getCalculations(User user) {
+        return calculationRepository.findByUser(user);
     }
 }

@@ -17,9 +17,8 @@ import java.util.*;
 @Table(name = "Users")
 public class User implements UserDetails {
     @Id
-
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
 
     @Setter
@@ -107,13 +106,13 @@ public class User implements UserDetails {
     @Column(name = "age")
     private int age;
 
-//    @Setter
-//    @Column(name = "active")
-//    private boolean active;
+    @Setter
+    @Column(name = "active")
+    private boolean active;
 
-//    public boolean isActive() {
-//        return active;
-//    }
+    public boolean isActive() {
+        return active;
+    }
 
 
     @Setter
@@ -135,7 +134,7 @@ public class User implements UserDetails {
         return role.equals(Role.ADMIN.getAuthority());
     }
 
-    public boolean isOutStaff() {
+    public boolean isOutstaff() {
         return role.equals(Role.OUTSTAFF.getAuthority());
     }
 

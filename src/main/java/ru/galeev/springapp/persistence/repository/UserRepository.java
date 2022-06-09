@@ -11,6 +11,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User findUserByLogin(String login);
     User saveAndFlush(User user);
     User findUserById(long id);
-    List<User> findAllByActiveTrue();
     List<User> findAllByRoleEqualsAndActiveIsTrue(String role);
 }

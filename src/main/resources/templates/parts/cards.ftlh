@@ -1,41 +1,41 @@
 
-<#macro usercard user>
+<#macro calccard calc user>
     <div class="card">
         <div class="card-body">
-            <h5 class="card-title">${user.login}</h5>
-            <h6 class="card-text">${user.name} ${user.surname}</h6>
-            <a href="/user/${user.id}" class="btn btn-primary">Посмотреть</a>
+            <h5 class="card-title">Расчет №${calc.id}</h5>
+            <h6 class="card-text">Стоимость: ${calc.cost}</h6>
+            <h6 class="card-text">Создатель: <a href="/user/${user.id}">${user.login}</a></h6>
+            <a href="/calc/${calc.id}" class="btn btn-primary">Посмотреть</a>
         </div>
     </div>
 </#macro>
 
-<#macro placecard place>
+<#macro contractcard contract>
     <div class="card">
         <div class="card-body">
-            <h5 class="card-title">${place.name}</h5>
-            <h6 class="card-text">Владелец: ${place.owner.login}</h6>
-<#--            <div class="progress mb-3">-->
-<#--                <div class="progress-bar" role="progressbar" style="width: ${rate}%;" aria-valuenow="${rate}" aria-valuemin="0" aria-valuemax="100">${rate/100*5}/5 баллов</div>-->
-<#--            </div>-->
-            <a href="/place/${place.id}" class="btn btn-primary">Посмотреть</a>
+            <h5 class="card-title">Контракт №${contract.id}</h5>
+            <h6 class="card-text">Расчет: <a href="/user/${contract.calculationId.id}">№${contract.calculationId.id}</a></h6>
+            <h6 class="card-text">Создатель: <a href="/user/${contract.user_id.id}">${user.login}</a></h6>
+            <h6 class="card-text">Подрядчик: <a href="/user/${contract.contractor_id.user.id}">${contract.contractor_id.user.login}</a></h6>
+            <a href="/contract/${contract.id}" class="btn btn-primary">Посмотреть</a>
         </div>
     </div>
 </#macro>
 
-<#macro eventcard event>
-    <#if event.evaluators != 0>
-        <#assign rate = event.rating*100/5/event.evaluators>
+<#macro contractorcard contractor>
+    <#if contractor.rating_num != 0>
+        <#assign rate = contractor.rating*100/5/contractor.rating_num>
     <#else>
-        <#assign rate = event.rating*100/5>
+        <#assign rate = contractor.rating*100/5>
     </#if>
     <div class="card" style="width: 18rem;">
         <div class="card-body">
-            <h5 class="card-title">${event.name}</h5>
-            <p class="card-text">${event.time}<br/>Количество людей: ${event.registeredVisitors}</p>
+            <h5 class="card-title">${contractor.name}</h5>
+            <p class="card-text">${contractor.time}<br/>Количество людей: ${contractor.registeredVisitors}</p>
             <div class="progress mb-3">
                 <div class="progress-bar" role="progressbar" style="width: ${rate?string.computer}%;" aria-valuenow="${rate}" aria-valuemin="0" aria-valuemax="100">${rate/100*5}/5 баллов</div>
             </div>
-            <a href="/events/${event.id}" class="btn btn-primary">Подробнее</a>
+            <a href="/events/${contractor.id}" class="btn btn-primary">Подробнее</a>
         </div>
     </div>
 </#macro>
