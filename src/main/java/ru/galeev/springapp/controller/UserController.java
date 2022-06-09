@@ -1,6 +1,5 @@
 package ru.galeev.springapp.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,8 +15,11 @@ import java.util.Map;
 @RequestMapping("/user")
 public class UserController {
 
-    @Autowired
-    UserService userService;
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping
     public String main(Model model) {
@@ -57,29 +59,29 @@ public class UserController {
         return "user/id";
     }
 
-    @GetMapping("{id}/subs")
-    public String showSubs(@PathVariable("id") User user,
-                           Model model) {
-        model.addAttribute("isSubs", true);
-        model.addAttribute("users", userService.getUserList(user.getSubscriptions()));
-        model.addAttribute("user", user);
-        return "user/cards";
-    }
-
-    @GetMapping("{id}/followers")
-    public String showFollowers(@PathVariable("id") User user,
-                           Model model) {
-        model.addAttribute("isFollowers", true);
-        model.addAttribute("users", userService.getUserList(user.getFollowers()));
-        model.addAttribute("user", user);
-        return "user/cards";
-    }
+//    @GetMapping("{id}/subs")
+//    public String showSubs(@PathVariable("id") User user,
+//                           Model model) {
+//        model.addAttribute("isSubs", true);
+//        model.addAttribute("users", userService.getUserList(user.getSubscriptions()));
+//        model.addAttribute("user", user);
+//        return "user/cards";
+//    }
+//
+//    @GetMapping("{id}/followers")
+//    public String showFollowers(@PathVariable("id") User user,
+//                           Model model) {
+//        model.addAttribute("isFollowers", true);
+//        model.addAttribute("users", userService.getUserList(user.getFollowers()));
+//        model.addAttribute("user", user);
+//        return "user/cards";
+//    }
 
     @GetMapping("{id}/events")
-    public String showEvents(@PathVariable("id") User user,
+    public String showCalcs(@PathVariable("id") User user,
                                 Model model) {
         model.addAttribute("isForUser", true);
-        model.addAttribute("events", userService.getEventList(user.getUserRegisteredEvents()));
+        model.addAttribute("calculations", userService.getCalculationList();
         model.addAttribute("user", user);
         return "events/cards";
     }

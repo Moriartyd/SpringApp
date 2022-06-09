@@ -17,14 +17,19 @@ import java.util.stream.Collectors;
 @Service("userDetailService")
 public class UserService implements UserDetailsService {
 
-    @Autowired
-    UserRepository userRepository;
-    @Autowired
-    MailService mailService;
-    @Autowired
-    MatrixService matrixService;
+    private final UserRepository userRepository;
+    private final MailService mailService;
+    private final MatrixService matrixService;
 
     private final static String link = "http://192.168.1.70:8090";
+
+    public UserService(UserRepository userRepository,
+                       MailService mailService,
+                       MatrixService matrixService) {
+        this.userRepository = userRepository;
+        this.mailService = mailService;
+        this.matrixService = matrixService;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
@@ -49,14 +54,14 @@ public class UserService implements UserDetailsService {
 //                    );
 //        mailService.send(user.getEmail(), "Код активации", message);
 //        user.setActive(false);
-        Set<String> types = Arrays.stream(EventType.values())
-                .map(EventType::name)
-                .collect(Collectors.toSet());
-        for (String key : form.keySet()) {
-            if (types.contains(key)) {
-                user.getKeywords().add(EventType.valueOf(key));
-            }
-        }
+//        Set<String> types = Arrays.stream(EventType.values())
+//                .map(EventType::name)
+//                .collect(Collectors.toSet());
+//        for (String key : form.keySet()) {
+//            if (types.contains(key)) {
+//                user.getKeywords().add(EventType.valueOf(key));
+//            }
+//        }
         user.setActive(true);
         user.setRole(Role.USER.getAuthority());
 

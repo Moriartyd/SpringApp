@@ -6,8 +6,7 @@
         u = Session.SPRING_SECURITY_CONTEXT.authentication.principal
         login = u.getLogin()
         isAdmin = u.isAdmin()
-        isManager = u.isManager()
-        isPlace = u.isPlace()
+        isContractor = u.isContractor()
         user_id = u.getId()
     >
 <#else>

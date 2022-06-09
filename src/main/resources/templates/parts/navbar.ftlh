@@ -19,35 +19,26 @@
                 <li class="nav-item">
                     <a class="nav-link" aria-current="page" href="/user/${user_id}">Профиль</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="/user">Пользователи</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="/events">Мероприятия</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="/place">Места</a>
-                </li>
                 </#if>
                 <#if isAdmin>
                 <li class="nav-item">
                     <a class="nav-link" aria-current="page" href="/admin">Администрирование</a>
                 </li>
                 </#if>
-                <#if isManager>
+                <#if isContractor>
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="/events/managing/registration">Новое мероприятие</a>
+                        <a class="nav-link" aria-current="page" href="/events/managing/registration">Запросы на контракты</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="/events/managing/my_events">Мои мероприятия</a>
+                        <a class="nav-link" aria-current="page" href="/events/managing/my_events">Мои контракты</a>
                     </li>
                 </#if>
-                <#if isPlace>
+                <#if isAdmin == false && isContractor == false>
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="/place/managing/registration">Новое место</a>
+                        <a class="nav-link" aria-current="page" href="/place/managing/registration"></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="/place/managing/my_places">Мои места</a>
+                        <a class="nav-link" aria-current="page" href="/place/managing/my_places">Мои расчеты</a>
                     </li>
                 </#if>
             </ul>
