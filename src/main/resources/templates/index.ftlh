@@ -20,6 +20,7 @@
         <div style="justify-content: center">
             <input type="submit" value="Войти" class="btn btn-primary" style="justify-content: center"/>
             <a href="/user/registration" class="btn btn-primary" style="margin-left: auto;margin-right: auto;">Зарегистрироваться</a>
+            <a href="/contractor/registrationU" class="btn btn-primary" style="margin-left: auto;margin-right: auto;">Регистрация подрядчиков</a>
         </div>
         <input type="hidden" name="_csrf" value="${_csrf.token}">
     </form>

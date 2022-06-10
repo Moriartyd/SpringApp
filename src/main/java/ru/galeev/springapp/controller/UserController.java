@@ -29,7 +29,6 @@ public class UserController {
 
     @GetMapping("/registration")
     public String registration(Model model) {
-        model.addAttribute("types", EventType.values());
         return "user/registration";
     }
 

@@ -36,7 +36,6 @@ public class CalculationController {
         model.addAttribute("techRoofs", techService.getAllTechRoof());
         model.addAttribute("techLadders", techService.getAllTechLadder());
         model.addAttribute("techInteriors", techService.getAllTechInterior());
-        model.addAttribute("types", EventType.values());
         return "calcs/registration";
     }
 
@@ -75,7 +74,7 @@ public class CalculationController {
         model.addAttribute("contractors", calculationService.findContractors(calc));
 //        model.addAttribute("contractors", calculationService.getContractorList(calc));
 //        model.addAllAttributes(calculationService.getCalcTechs(calc));
-        return "calcs/id";
+        return "contractors/contractorList";
     }
 
 //    @PostMapping("event/{id}/delete")

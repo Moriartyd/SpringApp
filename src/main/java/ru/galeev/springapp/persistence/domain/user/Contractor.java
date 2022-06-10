@@ -28,7 +28,7 @@ public class Contractor {
 
     @Setter
     @Column(name = "min_cost")
-    private Integer minCost; // X координата геопозиции
+    private double minCost; // X координата геопозиции
     @Setter
     @Column(name = "max_cost")
     private double maxCost; // Y координата геопозиции
@@ -38,7 +38,7 @@ public class Contractor {
     private double minWidth; // Y координата геопозиции
     @Setter
     @Column(name = "max_width")
-    private double maxHidth; // Y координата геопозиции
+    private double maxWidth; // Y координата геопозиции
 
     @Setter
     @Column(name = "min_height")
@@ -59,7 +59,7 @@ public class Contractor {
     private Integer minFloors; // X координата геопозиции
     @Setter
     @Column(name = "max_floors")
-    private double maxFloors; // Y координата геопозиции
+    private Integer maxFloors; // Y координата геопозиции
 
     @Setter
     @Column(name = "tech_carrier_wall")

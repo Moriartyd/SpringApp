@@ -3,18 +3,32 @@ package ru.galeev.springapp.controller;
 import org.springframework.security.core.Authentication;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ru.galeev.springapp.enums.EventType;
 import ru.galeev.springapp.enums.Role;
+import ru.galeev.springapp.persistence.domain.Calculation;
 import ru.galeev.springapp.persistence.domain.user.User;
 import ru.galeev.springapp.service.CalculationService;
+import ru.galeev.springapp.service.ContractorService;
+import ru.galeev.springapp.service.TechService;
+import ru.galeev.springapp.service.UserService;
+
+import java.util.Map;
 
 @org.springframework.stereotype.Controller
 @RequestMapping("/contracts")
 public class ContractsController {
 
     private final CalculationService calculationService;
+    private final TechService techService;
+    private final UserService userService;
+    private final ContractorService contractorService;
 
-    public ContractsController(CalculationService calculationService) {
+    public ContractsController(CalculationService calculationService,
+                               TechService techService, UserService userService, ContractorService contractorService) {
         this.calculationService = calculationService;
+        this.techService = techService;
+        this.userService = userService;
+        this.contractorService = contractorService;
     }
 
     @GetMapping

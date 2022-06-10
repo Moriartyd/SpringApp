@@ -49,26 +49,6 @@ public class UserService implements UserDetailsService {
         }
 //        user.setRole(Role.USER.getAuthority());
 //        user.setActivationCode(UUID.randomUUID().toString());
-//        String message = String.format("Здравствуйте, %s %s!\n" +
-//                "Добро пожаловать в EventTracker\n" +
-//                "Посетите пожалуйста эту ссылку для активации:\n" +
-//                "%s/activate/%s",
-//                    user.getName(),
-//                    user.getSurname(),
-//                    link,
-//                    user.getActivationCode()
-//                    );
-//        mailService.send(user.getEmail(), "Код активации", message);
-//        user.setActive(false);
-//        Set<String> types = Arrays.stream(EventType.values())
-//                .map(EventType::name)
-//                .collect(Collectors.toSet());
-//        for (String key : form.keySet()) {
-//            if (types.contains(key)) {
-//                user.getKeywords().add(EventType.valueOf(key));
-//            }
-//        }
-//        user.setAc(true);
         user.setRole(Role.USER.getAuthority());
 
         userRepository.saveAndFlush(user);
