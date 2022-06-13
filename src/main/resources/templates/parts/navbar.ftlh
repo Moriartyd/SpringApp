@@ -25,21 +25,20 @@
                     <a class="nav-link" aria-current="page" href="/admin">Администрирование</a>
                 </li>
                 </#if>
-<#--                <#if isOutstaff>-->
-<#--                    <li class="nav-item">-->
-<#--                        <a class="nav-link" aria-current="page" href="/events/managing/registration">Запросы на контракты</a>-->
-<#--                    </li>-->
-<#--                    <li class="nav-item">-->
-<#--                        <a class="nav-link" aria-current="page" href="/events/managing/my_events">Мои контракты</a>-->
-<#--                    </li>-->
-<#--                </#if>-->
-                <#if isAdmin == false>
+                <#if isOutstaff>
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="/place/managing/registration">Мои контракты</a>
+                        <a class="nav-link" aria-current="page" href="/contract/my_contract_rq">Запросы на контракты</a>
                     </li>
+                </#if>
+                <#if isAdmin == false && known>
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="/place/managing/my_places">Мои расчеты</a>
+                        <a class="nav-link" aria-current="page" href="/contract/my_contracts">Мои контракты</a>
                     </li>
+                <#if isOutstaff == false>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="/calc/my_calcs">Мои расчеты</a>
+                    </li>
+                </#if>
                 </#if>
             </ul>
             <#if known>

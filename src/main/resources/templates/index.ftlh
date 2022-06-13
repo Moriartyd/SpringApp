@@ -1,7 +1,7 @@
 <#import "parts/common.ftlh" as c>
 <#include "parts/security.ftlh">
 <@c.page "Вход и Регистрация">
-<h2>Информационная система поиска мероприятий</h2>
+<h2>Функциональная подсистема поиска подрядчиков</h2>
     <form action="/login" method="post">
         <div class="mb-3 align-items-center">
             <div class="col-auto">

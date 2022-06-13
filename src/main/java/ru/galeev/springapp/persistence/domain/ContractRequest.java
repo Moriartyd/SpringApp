@@ -2,6 +2,7 @@ package ru.galeev.springapp.persistence.domain;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import ru.galeev.springapp.persistence.domain.user.Contractor;
 import ru.galeev.springapp.persistence.domain.user.User;
 
@@ -10,12 +11,17 @@ import javax.persistence.*;
 @Entity
 @Table(name = "contract_request")
 @NoArgsConstructor
+@Setter
+@Getter
 public class ContractRequest {
 
     @Id
-    @Getter
-    @JoinColumn(referencedColumnName = "calculation_id")
-    private Long calculationId;
+    @GeneratedValue
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "calculation_id")
+    private Calculation calculation;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

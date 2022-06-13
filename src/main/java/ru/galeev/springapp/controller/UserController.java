@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.galeev.springapp.enums.EventType;
 import ru.galeev.springapp.enums.Role;
+import ru.galeev.springapp.service.ContractorService;
 import ru.galeev.springapp.service.UserService;
 import ru.galeev.springapp.persistence.domain.user.User;
 
@@ -16,9 +17,12 @@ import java.util.Map;
 public class UserController {
 
     private final UserService userService;
+    private final ContractorService contractorService;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService,
+                          ContractorService contractorService) {
         this.userService = userService;
+        this.contractorService = contractorService;
     }
 
     @GetMapping
@@ -48,9 +52,13 @@ public class UserController {
                              Model model,
                              Authentication auth) {
         model.addAttribute("user", user);
-        model.addAttribute("contracts_cnt", userService.getContracts(user).size());
        if (Role.valueOf(user.getRole()) == Role.USER) {
             model.addAttribute("calcs_cnt", userService.getCalculations(user).size());
+           model.addAttribute("contracts_cnt", userService.getContracts(user).size());
+        }
+        if (Role.valueOf(user.getRole()) == Role.OUTSTAFF) {
+            model.addAllAttributes(contractorService.getResolvedTechMap(user));
+            model.addAttribute("contracts_cnt", userService.getContracts(user).size());
         }
         return "user/id";
     }

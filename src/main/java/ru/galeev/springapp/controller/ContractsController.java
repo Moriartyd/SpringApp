@@ -3,9 +3,7 @@ package ru.galeev.springapp.controller;
 import org.springframework.security.core.Authentication;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.galeev.springapp.enums.EventType;
-import ru.galeev.springapp.enums.Role;
-import ru.galeev.springapp.persistence.domain.Calculation;
+import ru.galeev.springapp.persistence.domain.ContractRequest;
 import ru.galeev.springapp.persistence.domain.user.User;
 import ru.galeev.springapp.service.CalculationService;
 import ru.galeev.springapp.service.ContractorService;
@@ -15,7 +13,7 @@ import ru.galeev.springapp.service.UserService;
 import java.util.Map;
 
 @org.springframework.stereotype.Controller
-@RequestMapping("/contracts")
+@RequestMapping("/contract")
 public class ContractsController {
 
     private final CalculationService calculationService;
@@ -31,13 +29,35 @@ public class ContractsController {
         this.contractorService = contractorService;
     }
 
-    @GetMapping
-    public String main(Model model,  Authentication auth) {
-        model.addAttribute("title", "Расчерты");
-        model.addAttribute("calcs", calculationService.getCalcs((User)auth.getPrincipal()));
-        model.addAttribute("user", (User)auth.getPrincipal());
-        model.addAttribute("isContractor", ((User)auth.getPrincipal()).getRole().equals(Role.OUTSTAFF.getAuthority()));
-        return "common";
+    @GetMapping("my_contracts")
+    public String showMyContracts(Model model,  Authentication auth) {
+        User user = (User) auth.getPrincipal();
+        model.addAttribute("isContracts", true);
+        model.addAttribute("contracts", userService.getContracts(user));
+        model.addAttribute("user", user);
+        return "user/cards";
+    }
+
+    @GetMapping("my_contract_rq")
+    public String showContractRequests(Model model, Authentication auth) {
+        User user = (User) auth.getPrincipal();
+        model.addAttribute("conList", userService.getContractRq(user));
+        model.addAttribute("user", user);
+        return "contracts/contractRqList";
+    }
+
+    @PostMapping("{id}/accept")
+    public String acceptContract( @PathVariable("id") ContractRequest contractRequest,
+                                  Model model) {
+        contractorService.acceptContract(contractRequest);
+        return "redirect:/contract/my_contract_rq";
+    }
+
+    @PostMapping("{id}/reject")
+    public String rejectContract( @PathVariable("id") ContractRequest contractRequest,
+                                  Model model) {
+        contractorService.rejectContract(contractRequest);
+        return "redirect:/contract/my_contract_rq";
     }
 
 //    @GetMapping("/{id}")

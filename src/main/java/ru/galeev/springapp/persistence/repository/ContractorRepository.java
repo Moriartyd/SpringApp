@@ -7,4 +7,5 @@ import ru.galeev.springapp.persistence.domain.user.User;
 
 public interface ContractorRepository extends JpaRepository<Contractor, Long> {
     Contractor findByUser(User user);
+
 }

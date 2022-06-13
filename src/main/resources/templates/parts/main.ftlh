@@ -44,8 +44,8 @@
                 var eventcol = document.getElementById("eventcol");
                 var placecol = document.getElementById("placecol");
                 usercol.innerHTML = 'Пользователи';
-                eventcol.innerHTML = 'События';
-                placecol.innerHTML = 'Места';
+                eventcol.innerHTML = 'Контракты';
+                placecol.innerHTML = 'Подрядчики';
                 let searchText = this.value.toLowerCase();
                 for (var i = 0; i < users.length && i < 10; i++) {
                     if (users[i].name.toLowerCase().search(searchText) !== -1 ||

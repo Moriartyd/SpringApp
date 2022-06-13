@@ -50,8 +50,12 @@ public class CalculationController {
     @GetMapping("/my_calcs")
     public String getEventList(Model model,
                                Authentication auth) {
-        model.addAttribute("calcList", calculationService.getCalcs((User) auth.getPrincipal()));
-        return "calcs/calcList";
+        User user = (User) auth.getPrincipal();
+        model.addAttribute("calcs", calculationService.getCalcs(user));
+        model.addAttribute("isCalcs", true);
+        model.addAttribute("user", user);
+
+        return "user/cards";
     }
 
 //    @Transient
@@ -72,6 +76,7 @@ public class CalculationController {
 //        model.addAttribute("canEdit", calculationService.checkForEditPossibility(calc, (User) auth.getPrincipal()));
         model.addAttribute("calc", calc);
         model.addAttribute("contractors", calculationService.findContractors(calc));
+        model.addAttribute("statusMap", calculationService.getStatusMap(calc));
 //        model.addAttribute("contractors", calculationService.getContractorList(calc));
 //        model.addAllAttributes(calculationService.getCalcTechs(calc));
         return "contractors/contractorList";

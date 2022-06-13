@@ -101,6 +101,17 @@ public class CalculationService {
         return contractorRepository.findAll();
     }
 
+    public Map<String,Integer> getStatusMap(Calculation calc) {
+        Map<String, Integer> statusMap = new HashMap<>();
+
+        List<ContractRequest> contractRequests = contractRequestRepository.findContractRequestsByCalculation(calc);
+
+        for (ContractRequest cr : contractRequests) {
+            statusMap.put(cr.getContractor().getUser().getLogin(), cr.getStatusContractor());
+        }
+        return statusMap;
+    }
+
 //    public Map<String, String> getCalcTechs(Calculation calc) {
 //        Map<String, String> model = new HashMap<>();
 //

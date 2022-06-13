@@ -13,7 +13,7 @@
     <#assign
         login = "unknown"
         isAdmin = false
-        isManager = false
+        isOutstaff = false
         isPlace = false
         user_id = -1
     >

@@ -18,6 +18,7 @@
     <#if contracts??>
         <@lst.list contracts true false user/>
     <#elseif calcs??>
+        <a href="/calc/registration" class="btn btn-primary">Новый расчет</a>
         <@lst.list calcs false true user />
     <#else>
         ${message}

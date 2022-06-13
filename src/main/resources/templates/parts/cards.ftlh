@@ -14,10 +14,16 @@
     <div class="card">
         <div class="card-body">
             <h5 class="card-title">Контракт №${contract.id}</h5>
-            <h6 class="card-text">Расчет: <a href="/user/${contract.calculationId.id}">№${contract.calculationId.id}</a></h6>
-            <h6 class="card-text">Создатель: <a href="/user/${contract.user_id.id}">${user.login}</a></h6>
-            <h6 class="card-text">Подрядчик: <a href="/user/${contract.contractor_id.user.id}">${contract.contractor_id.user.login}</a></h6>
-            <a href="/contract/${contract.id}" class="btn btn-primary">Посмотреть</a>
+            <h6 class="card-text">Расчет: <a href="/calc/${contract.calculation.id}">№${contract.calculation.id}</a></h6>
+            <h6 class="card-text">Создатель: <a href="/user/${contract.user.id}">${contract.user.login}</a></h6>
+            <h6 class="card-text">Подрядчик: <a href="/user/${contract.contractor.user.id}">${contract.contractor.user.login}</a></h6>
+            <#if contract.statusContractor == 1>
+            <h6 class="card-text">Статус: Принят подрядчиком</h6>
+            <#elseif contract.statusContractor == 0>
+            <h6 class="card-text">Статус: В обработке</h6>
+            <#else>
+            <h6 class="card-text">Статус: Отклонен подрядчиком</h6>
+            </#if>
         </div>
     </div>
 </#macro>

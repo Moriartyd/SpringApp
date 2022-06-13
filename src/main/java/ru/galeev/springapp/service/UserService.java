@@ -7,12 +7,11 @@ import org.springframework.stereotype.Service;
 import ru.galeev.springapp.enums.Role;
 import ru.galeev.springapp.persistence.domain.Calculation;
 import ru.galeev.springapp.persistence.domain.ContractRequest;
+import ru.galeev.springapp.persistence.domain.Rating;
+import ru.galeev.springapp.persistence.domain.RatingPK;
 import ru.galeev.springapp.persistence.domain.user.Contractor;
 import ru.galeev.springapp.persistence.domain.user.User;
-import ru.galeev.springapp.persistence.repository.CalculationRepository;
-import ru.galeev.springapp.persistence.repository.ContractRequestRepository;
-import ru.galeev.springapp.persistence.repository.ContractorRepository;
-import ru.galeev.springapp.persistence.repository.UserRepository;
+import ru.galeev.springapp.persistence.repository.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -24,17 +23,20 @@ public class UserService implements UserDetailsService {
     private final ContractRequestRepository contractRequestRepository;
     private final ContractorRepository contractorRepository;
     private final CalculationRepository calculationRepository;
+    private final RatingRepository ratingRepository;
 
     private final static String link = "http://192.168.1.70:8090";
 
     public UserService(UserRepository userRepository,
                        ContractRequestRepository contractRequestRepository,
                        ContractorRepository contractorRepository,
-                       CalculationRepository calculationRepository) {
+                       CalculationRepository calculationRepository,
+                       RatingRepository ratingRepository) {
         this.userRepository = userRepository;
         this.contractRequestRepository = contractRequestRepository;
         this.contractorRepository = contractorRepository;
         this.calculationRepository = calculationRepository;
+        this.ratingRepository = ratingRepository;
     }
 
     @Override
@@ -51,7 +53,14 @@ public class UserService implements UserDetailsService {
 //        user.setActivationCode(UUID.randomUUID().toString());
         user.setRole(Role.USER.getAuthority());
 
-        userRepository.saveAndFlush(user);
+        User createdUser = userRepository.saveAndFlush(user);
+        List<Contractor> contractors = contractorRepository.findAll();
+        for (Contractor con : contractors) {
+            Rating r = new Rating();
+            r.setRating(0);
+            r.setRatingPK(new RatingPK(createdUser, con));
+            ratingRepository.saveAndFlush(r);
+        }
         return true;
     }
 
@@ -134,7 +143,7 @@ public class UserService implements UserDetailsService {
     }
 
     public List<ContractRequest> getContracts(User user) {
-        if (user.getRole().equals(Role.OUTSTAFF)) {
+        if (user.getRole().equals(Role.OUTSTAFF.getAuthority())) {
             Contractor contractor = contractorRepository.findByUser(user);
             if (contractor != null) {
                 return contractRequestRepository.findByContractorAccepted(contractor, 1);
@@ -148,5 +157,10 @@ public class UserService implements UserDetailsService {
 
     public List<Calculation> getCalculations(User user) {
         return calculationRepository.findByUser(user);
+    }
+
+    public List<ContractRequest> getContractRq(User user) {
+        Contractor contractor = contractorRepository.findByUser(user);
+        return contractRequestRepository.findContractRequestsByContractor(contractor);
     }
 }

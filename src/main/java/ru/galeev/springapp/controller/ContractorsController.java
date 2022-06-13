@@ -77,4 +77,31 @@ public class ContractorsController {
 
         return "redirect:/login";
     }
+
+    @GetMapping("{id}")
+    public String showContractor(@PathVariable("id") User user,
+                                 Authentication auth,
+                                 Model model) {
+        model.addAllAttributes(contractorService.getResolvedTechMap(user));
+        model.addAttribute("user", user);
+        model.addAttribute("con", contractorService.getContractorFromUser(user));
+        model.addAttribute("contracts_cnt", userService.getContracts(user).size());
+        model.addAttribute("rated", contractorService.getRate(user, (User) auth.getPrincipal()));
+        return "user/id";
+    }
+
+    @PostMapping("{conId}/request/calc/")
+    public String createContractRequest(@PathVariable("conId") Contractor contractor,
+                                        @RequestParam Map<String, String> form) {
+        contractorService.createContractRequest(contractor, form.get("calcId"));
+        return "redirect:/calc/" +  form.get("calcId") + "/con";
+    }
+
+    @PostMapping("{conId}/set_rating")
+    public String setRating(@PathVariable("conId") Contractor contractor,
+                            @RequestParam Map<String, String> form,
+                            Authentication auth) {
+        contractorService.setRating(contractor, (User) auth.getPrincipal(), form.get("rating"));
+        return "redirect:/contractor/" + contractor.getUser().getId();
+    }
 }

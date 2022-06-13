@@ -8,8 +8,8 @@
 
     <div class="row">
         <div class="col" id="usercol" style="width: 20rem;">Пользователи</div>
-        <div class="col" id="eventcol" style="width: 20rem;">События</div>
-        <div class="col" id="placecol" style="width: 20rem;">Места</div>
+        <div class="col" id="eventcol" style="width: 20rem;">Контракты</div>
+        <div class="col" id="placecol" style="width: 20rem;">Подрядчики</div>
     </div>
     <@main.addJs/>
 </@c.page>

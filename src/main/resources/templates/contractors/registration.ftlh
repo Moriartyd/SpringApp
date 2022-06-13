@@ -192,7 +192,7 @@
         </div>
 
         <input type="hidden" id="rate" name="rating" value="5"/>
-        <input type="hidden" id="rateNum" name="ratingNum" value="0"/>
+        <input type="hidden" id="rateNum" name="ratingNum" value="1"/>
 <#--        <input type="hidden" id="user" name="user" value="${user.id}"/>-->
         <br/>
         <input type="submit" id="but" value="Создать" class="btn btn-primary"/>
