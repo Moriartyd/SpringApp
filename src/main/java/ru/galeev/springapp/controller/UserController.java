@@ -4,7 +4,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.galeev.springapp.enums.EventType;
 import ru.galeev.springapp.enums.Role;
 import ru.galeev.springapp.service.ContractorService;
 import ru.galeev.springapp.service.UserService;
@@ -60,6 +59,7 @@ public class UserController {
             model.addAllAttributes(contractorService.getResolvedTechMap(user));
             model.addAttribute("contracts_cnt", userService.getContracts(user).size());
         }
+        model.addAttribute("rated", contractorService.getRate(user, (User) auth.getPrincipal()));
         return "user/id";
     }
 

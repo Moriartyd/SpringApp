@@ -1,41 +1,33 @@
 <#import "../parts/common.ftlh" as c>
 <#include "../parts/security.ftlh">
-    <@c.page "Список пользователей">
+    <@c.page "Список расчетов">
         <div class="container mb-3">
             <div class="row">
                 <div class="col">
                     <i>ID</i>
                 </div>
                 <div class="col">
-                    <i>Логин</i>
+<#--                    <i>Редактировать</i>-->
                 </div>
                 <div class="col">
-                    <i>Права</i>
-                </div>
-                <div class="col">
-                    <i>Действие</i>
+<#--                    <i>Удалить</i>-->
                 </div>
             </div>
-        <#list users as user>
-            <#if user.id != user_id>
+        <#list crs as cr>
                 <div class="row">
                     <div class="col">
-                        <i>${user.id}</i>
+                        <a href="/cr/${cr.id}">${cr.id}</a>
                     </div>
+<#--                    <div class="col">-->
+<#--                        <a href="/admin/calc/${cr.id}" class="btn btn-primary">Редактировать</a>-->
+<#--                    </div>-->
                     <div class="col">
-                        <a href="/admin/user/${user.id}">${user.login}</a>
-                    </div>
-                    <div class="col">
-                        ${user.role}
-                    </div>
-                    <div class="col">
-                        <form method="post" action="/admin/user/${user.id}/delete">
+                        <form method="post" action="/admin/cr/${cr.id}/delete">
                             <input type="submit" value="Удалить" class="btn btn-primary">
                             <input type="hidden" name="_csrf" value="${_csrf.token}">
                         </form>
                     </div>
                 </div>
-            </#if>
         </#list>
         </div>
     </@c.page>

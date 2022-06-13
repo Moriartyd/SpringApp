@@ -45,63 +45,6 @@ public class User implements UserDetails {
     @Column(name = "email")
     private String email;
 
-//
-//    @Setter
-//    @ElementCollection(targetClass = EventType.class, fetch = FetchType.EAGER)
-//    @CollectionTable(name = "user_keywords", joinColumns = @JoinColumn(name = "user_id"))
-//    @Enumerated(EnumType.STRING)
-//    private Set<EventType> keywords = new HashSet<EventType>();
-
-//
-//    @Hidden
-//    @ManyToMany
-//    @JoinTable(
-//            name = "relation_events_users",
-//            joinColumns = { @JoinColumn(name = "user_id") },
-//            inverseJoinColumns = { @JoinColumn(name = "event_id") }
-//    )
-//    private List<Event> userRegisteredEvents;
-
-//
-//    @Hidden
-//    @ManyToMany
-//    @JoinTable(
-//            name = "relation_events_artists",
-//            joinColumns = { @JoinColumn(name = "artist") },
-//            inverseJoinColumns = { @JoinColumn(name = "event") }
-//    )
-//    private List<Event> artistRegisteredEvents;
-
-//
-//    @Hidden
-//    @ManyToMany
-//    @JoinTable(
-//            name = "user_followers",
-//            joinColumns = { @JoinColumn(name = "user_id") },
-//            inverseJoinColumns = { @JoinColumn(name = "follower_id") }
-//    )
-//    private List<User> followers;
-//
-//
-//    @Hidden
-//    @ManyToMany
-//    @JoinTable(
-//            name = "user_followers",
-//            joinColumns = { @JoinColumn(name = "follower_id") },
-//            inverseJoinColumns = { @JoinColumn(name = "user_id") }
-//    )
-//    private List<User> subscriptions;
-//
-//
-//    @ManyToMany
-//    @JoinTable(
-//            name = "relation_events_event_managers",
-//            joinColumns = { @JoinColumn(name = "manager") },
-//            inverseJoinColumns = { @JoinColumn(name = "event") }
-//    )
-//    private List<Event> eventList = new ArrayList<Event>();
-
-
     @Setter
     @Column(name = "age")
     private int age;

@@ -2,6 +2,7 @@ package ru.galeev.springapp.persistence.domain.user;
 
 import lombok.Getter;
 import lombok.Setter;
+import ru.galeev.springapp.utils.Hidden;
 
 import javax.persistence.*;
 
@@ -16,6 +17,7 @@ public class Contractor {
 
     @Setter
     @OneToOne(fetch = FetchType.LAZY)
+//    @Hidden
     @JoinColumn(name = "user_id")
     private User user;
 

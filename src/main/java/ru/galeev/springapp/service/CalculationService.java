@@ -112,6 +112,14 @@ public class CalculationService {
         return statusMap;
     }
 
+    public List<Calculation> getAllCalcs() {
+        return calculationRepository.findAll();
+    }
+
+    public List<ContractRequest> getAllCrs() {
+        return contractRequestRepository.findAll();
+    }
+
 //    public Map<String, String> getCalcTechs(Calculation calc) {
 //        Map<String, String> model = new HashMap<>();
 //

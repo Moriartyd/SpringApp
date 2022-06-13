@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.galeev.springapp.enums.Role;
 import ru.galeev.springapp.persistence.domain.user.User;
+import ru.galeev.springapp.service.CalculationService;
 import ru.galeev.springapp.service.UserService;
 
 import java.util.*;
@@ -16,15 +17,32 @@ import java.util.*;
 public class AdminController {
 
     private final UserService userService;
+    private final CalculationService calculationService;
 
-    public AdminController(UserService userService) {
+    public AdminController(UserService userService,
+                           CalculationService calculationService) {
         this.userService = userService;
+        this.calculationService = calculationService;
     }
 
-    @GetMapping
+    @GetMapping("users")
     public String getAllUsers(Model model) {
         model.addAttribute("users", userService.getAllUsers());
+        model.addAttribute("calcs", calculationService.getAllCalcs());
+        model.addAttribute("crs", calculationService.getAllCrs());
         return "admin/userList";
+    }
+
+    @GetMapping("contracts")
+    public String getAllCrs(Model model) {
+        model.addAttribute("crs", calculationService.getAllCrs());
+        return "admin/crList";
+    }
+
+    @GetMapping("calcs")
+    public String getAllCalcs(Model model) {
+        model.addAttribute("calcs", calculationService.getAllCalcs());
+        return "admin/calcsList";
     }
 
     @GetMapping("user/{id}")

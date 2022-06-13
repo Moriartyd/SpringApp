@@ -21,9 +21,15 @@
                 </li>
                 </#if>
                 <#if isAdmin>
-                <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="/admin">Администрирование</a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="/admin/users">Пользователи</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="/admin/contracts">Контракты</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="/admin/calcs">Расчеты</a>
+                    </li>
                 </#if>
                 <#if isOutstaff>
                     <li class="nav-item">

@@ -1,11 +1,9 @@
 package ru.galeev.springapp.controller;
 
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.galeev.springapp.enums.EventType;
 import ru.galeev.springapp.persistence.domain.Calculation;
 import ru.galeev.springapp.persistence.domain.user.User;
 import ru.galeev.springapp.service.CalculationService;
