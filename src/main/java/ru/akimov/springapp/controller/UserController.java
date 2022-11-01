@@ -65,6 +65,7 @@ public class UserController {
         } else {
             model.addAttribute("rated", contractorService.getRate(user, (User) auth.getPrincipal()));
         }
+        model.addAttribute("con", contractorService.getContractorFromUser(user));
         return "user/id";
     }
 

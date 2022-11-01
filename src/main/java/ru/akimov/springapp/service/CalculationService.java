@@ -20,6 +20,7 @@ public class CalculationService {
     private final ContractRequestRepository contractRequestRepository;
     private final TechService techService;
     private final ContractorRepository contractorRepository;
+    private final RatingService ratingService;
 
     private static final int ACTIVE = 1;
     private static final int INACTIVE = 0;
@@ -28,12 +29,13 @@ public class CalculationService {
     public CalculationService(CalculationRepository calculationRepository,
                               UserRepository userRepository,
                               ContractRequestRepository contractRequestRepository,
-                              TechService techService, ContractorRepository contractorRepository) {
+                              TechService techService, ContractorRepository contractorRepository, RatingService ratingService) {
         this.calculationRepository = calculationRepository;
         this.userRepository = userRepository;
         this.contractRequestRepository = contractRequestRepository;
         this.techService = techService;
         this.contractorRepository = contractorRepository;
+        this.ratingService = ratingService;
     }
 
 //    public void createEvent(Calculation event, User user, Map<String, String> form) {
@@ -98,8 +100,10 @@ public class CalculationService {
         return calc.getUser().getId().equals(user.getId());
     }
 
-    public List<Contractor> findContractors(Calculation calc) {
-        return contractorRepository.findAll();
+    public ArrayList<Contractor> findContractors(Calculation calc) {
+        ArrayList<Contractor> list = ratingService.getRangedList(contractorRepository.findAll(), calc);
+        Collections.reverse(list);
+        return list;
     }
 
     public Map<String,Integer> getStatusMap(Calculation calc) {

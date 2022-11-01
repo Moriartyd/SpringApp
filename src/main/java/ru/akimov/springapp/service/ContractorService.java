@@ -185,7 +185,7 @@ public class ContractorService {
 
     public Integer getRate(User con, User user) {
         if (!con.getId().equals(user.getId())) {
-            if (con.getRole().equals(Role.OUTSTAFF)) {
+            if (con.getRole().equals(Role.OUTSTAFF.getAuthority())) {
                 return ratingRepository.findByRatingPK(new RatingPK(user, contractorRepository.findByUser(con))).getRating();
             } else {
                 return -1;
